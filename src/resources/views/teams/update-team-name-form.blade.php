@@ -34,6 +34,71 @@
 
             <x-input-error for="name" class="mt-2" />
         </div>
+
+        <!-- Team Registration Code -->
+        <div class="col-span-4 sm:col-span-4">
+            <x-label for="registration_code" value="{{ __('Registration code') }}" />
+
+            <x-input id="registration_code"
+                     type="text"
+                     class="mt-1"
+                     wire:model="state.registration_code"
+                     :disabled="! Gate::check('update', $team)" />
+
+            <x-input-error for="registration_code" class="mt-2" />
+        </div>
+
+        <!-- Team Address -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="address" value="{{ __('Address') }}" />
+
+            <x-input id="address"
+                     type="text"
+                     class="mt-1 block w-full"
+                     wire:model="state.address"
+                     :disabled="! Gate::check('update', $team)" />
+
+            <x-input-error for="address" class="mt-2" />
+        </div>
+
+        <!-- Team Email -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="email" value="{{ __('Email') }}" />
+
+            <x-input id="email"
+                     type="text"
+                     class="mt-1"
+                     wire:model="state.email"
+                     :disabled="! Gate::check('update', $team)" />
+
+            <x-input-error for="email" class="mt-2" />
+        </div>
+
+        <!-- Team Phone -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="phone" value="{{ __('Phone number') }}" />
+
+            <x-input id="phone"
+                     type="text"
+                     class="mt-1"
+                     wire:model="state.phone"
+                     :disabled="! Gate::check('update', $team)" />
+
+            <x-input-error for="phone" class="mt-2" />
+        </div>
+
+        <!-- Team Website -->
+        <div class="col-span-6 sm:col-span-4">
+            <x-label for="website" value="{{ __('Website') }}" />
+
+            <x-input id="website"
+                     type="text"
+                     class="mt-1"
+                     wire:model="state.website"
+                     :disabled="! Gate::check('update', $team)" />
+
+            <x-input-error for="website" class="mt-2" />
+        </div>
     </x-slot>
 
     @if (Gate::check('update', $team))

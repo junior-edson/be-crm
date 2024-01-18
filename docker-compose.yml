@@ -25,6 +25,8 @@ services:
         build:
             context: .
             dockerfile: php.dockerfile
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
         container_name: php
         volumes:
             - ./src:/var/www/html

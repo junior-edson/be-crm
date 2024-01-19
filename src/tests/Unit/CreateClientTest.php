@@ -7,7 +7,6 @@ use App\Enums\EnumClientType;
 use App\Http\Requests\CreateClientRequest;
 use App\Models\Team;
 use App\Services\CreateClientService;
-use Illuminate\Http\Client\Request;
 use Tests\TestCase;
 
 class CreateClientTest extends TestCase

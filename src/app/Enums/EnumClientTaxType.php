@@ -29,4 +29,16 @@ enum EnumClientTaxType
             self::SELF_LIQUIDATION => 'SELF_LIQUIDATION',
         };
     }
+
+    /**
+     * @return array
+     */
+    public static function getValues(): array
+    {
+        return [
+            self::TAX_21_PERCENT->personTaxes(),
+            self::SELF_LIQUIDATION->personTaxes(),
+            self::SUBCONTRACTOR->companyTaxes(),
+        ];
+    }
 }

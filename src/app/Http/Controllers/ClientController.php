@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateClientRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Services\CreateClientService;
+use App\Services\UpdateClientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Exception;
@@ -59,9 +61,18 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(
+        UpdateClientRequest $request,
+        string $id,
+        UpdateClientService $service
+    ): JsonResponse {
+        try {
+            $service->execute($request, $id);
+
+            return response()->json([], 204);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     /**

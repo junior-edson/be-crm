@@ -10,7 +10,18 @@ class Client extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['team_id', 'name', 'type', 'registration_code', 'tax_type', 'address', 'phone', 'email'];
+    public $incrementing = false;
+    protected $keyType = 'string';
+    protected $fillable = [
+        'team_id',
+        'name',
+        'type',
+        'registration_code',
+        'tax_type',
+        'address',
+        'phone',
+        'email',
+    ];
 
     /**
      * The "booting" method of the model.

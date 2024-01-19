@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignId('team_id')->constrained();
             $table->enum('type', EnumClientType::getValues());
             $table->enum('tax_type', EnumClientTaxType::getValues());
             $table->string('registration_code')->nullable();

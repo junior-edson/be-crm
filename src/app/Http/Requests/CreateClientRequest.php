@@ -24,9 +24,9 @@ class CreateClientRequest extends FormRequest
             'type' => 'required|in:INDIVIDUAL,COMPANY',
             'tax_type' => 'required|in:TAX_21_PERCENT,SELF_LIQUIDATION,SUBCONTRACTOR',
             'registration_code' => 'nullable',
-            'address' => 'required',
-            'phone' => 'nullable',
-            'email' => 'nullable|email',
+            'address' => 'required|max:255',
+            'phone' => 'nullable|max:25',
+            'email' => 'nullable|email|max:50',
         ];
     }
 }

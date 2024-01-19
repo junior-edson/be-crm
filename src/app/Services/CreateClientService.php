@@ -3,11 +3,19 @@
 namespace App\Services;
 
 use App\Http\Requests\CreateClientRequest;
+use App\Models\Client;
 
 class CreateClientService
 {
-    public function execute(CreateClientRequest $request)
+    /**
+     * @param CreateClientRequest $request
+     * @return void
+     */
+    public function execute(CreateClientRequest $request): void
     {
-        // TODO
+        $data = $request->all();
+
+        $client = new Client($data);
+        $client->save();
     }
 }

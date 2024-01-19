@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateClientRequest;
+use App\Models\Client;
 use App\Services\CreateClientService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Exception;
 
 class ClientController extends Controller
 {
@@ -27,11 +30,15 @@ class ClientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateClientRequest $request, CreateClientService $service)
+    public function store(CreateClientRequest $request, CreateClientService $service): JsonResponse
     {
-        $request->validated();
+        try {
+            $service->execute($request);
 
-        return $service->execute($request);
+            return response()->json([], 204);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     /**

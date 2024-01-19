@@ -15,11 +15,11 @@ class CreateClientTest extends TestCase
     public function testCreateIndividualClient()
     {
         $payload = [
-            'team_id' => Team::factory()->create(),
+            'team_id' => Team::factory()->create()->id,
             'type' => EnumClientType::INDIVIDUAL,
             'tax_type' => EnumClientTaxType::TAX_21_PERCENT->personTaxes(),
             'registration_code' => null,
-            'address' => 'Test Address',
+            'address' => '123 Main St',
             'phone' => '1234567890',
             'email' => 'test@email.com',
         ];
@@ -28,6 +28,7 @@ class CreateClientTest extends TestCase
         $service = new CreateClientService();
         $service->execute($request);
 
-        $this->assertTrue(true);
+        $this->assertDatabaseCount('clients', 1);
+        $this->assertDatabaseHas('clients', $payload);
     }
 }

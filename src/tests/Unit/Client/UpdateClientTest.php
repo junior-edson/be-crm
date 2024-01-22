@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Client;
 
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
-use App\Services\UpdateClientService;
-use Tests\TestCase;
+use App\Services\Client\UpdateClientService;
 use Exception;
+use Tests\TestCase;
 
 class UpdateClientTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Client;
 
 use App\Http\Requests\CreateClientRequest;
 use App\Models\Client;

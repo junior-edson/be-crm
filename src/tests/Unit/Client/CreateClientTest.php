@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Client;
 
 use App\Enums\EnumClientTaxType;
 use App\Enums\EnumClientType;
 use App\Http\Requests\CreateClientRequest;
 use App\Models\Team;
-use App\Services\CreateClientService;
+use App\Services\Client\CreateClientService;
 use Tests\TestCase;
 
 class CreateClientTest extends TestCase

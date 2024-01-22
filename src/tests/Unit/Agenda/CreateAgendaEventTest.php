@@ -17,7 +17,7 @@ class CreateAgendaEventTest extends TestCase
 
         $payload = [
             'client_id' => $client->id,
-            'event_datetime' => Carbon::now()->addDays(1)->format('Y-m-d H:i'),
+            'event_datetime' => Carbon::now()->addDays()->format('Y-m-d H:i'),
             'address' => '123 Main St',
             'description' => 'Test description',
         ];

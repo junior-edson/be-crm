@@ -42,14 +42,17 @@ jobs:
     - name: Configure key for testing
       run: php artisan key:generate --env=testing
 
-    #- name: Clear Config
-    #  run: php artisan config:clear
+    - name: Clear Config
+      run: php artisan config:clear
 
-    #- name: Clear Laravel Cache
-    #  run: php artisan optimize:clear
+    - name: Clear Laravel Cache
+      run: php artisan optimize:clear
 
     - name: Check .env.testing
       run: cat .env.testing
+
+    - name: Run migrations
+      run: php artisan migrate --env=testing
 
     - name: Run Tests
       run: php artisan test --parallel

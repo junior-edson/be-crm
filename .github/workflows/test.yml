@@ -41,7 +41,7 @@ jobs:
 
     - name: Configure Laravel for testing
       run: |
-        php artisan migration --env=testing
+        php artisan migrate --env=testing
         php artisan key:generate --env=testing
 
     - name: Run Tests

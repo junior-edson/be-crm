@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateAgendaEventRequest;
+use App\Http\Requests\UpdateAgendaEventRequest;
 use App\Services\Agenda\CreateAgendaEventService;
+use App\Services\Agenda\UpdateAgendaEventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -60,9 +62,16 @@ class AgendaEventController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateAgendaEventRequest $request, int $id): JsonResponse
     {
-        //
+        try {
+            $service = new UpdateAgendaEventService();
+            $service->execute($request, $id);
+
+            return response()->json([], 204);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 
     /**

@@ -45,6 +45,7 @@ jobs:
       run: |
         sed -i 's/DB_HOST=host.docker.internal/DB_HOST=mysql/' .env.testing
         sed -i 's/DB_USERNAME=root/DB_USERNAME=user_test/' .env.testing
+        sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=secret/' .env.testing
         php artisan key:generate --env=testing
 
     - name: Clear Config

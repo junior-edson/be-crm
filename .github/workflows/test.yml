@@ -30,11 +30,15 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
+    - name: Get MySQL Container IP
+      id: containerip
+      run: echo ::set-output name=ip::$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql)
+
     - name: Install MySQL Client
       run: sudo apt-get install default-mysql-client
 
     - name: Create Database
-      run: echo "CREATE DATABASE IF NOT EXISTS be_crm_test;" | mysql -h mysql -u test_user -p'test_password'
+      run: echo "CREATE DATABASE IF NOT EXISTS be_crm_test;" | mysql -h ${{ steps.containerip.outputs.ip }} -u test_user -p'test_password'
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2

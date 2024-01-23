@@ -20,6 +20,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: be_crm_test
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_password
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -36,12 +38,14 @@ jobs:
     - name: Install Dependencies
       run: composer install --no-interaction --prefer-dist
 
-    #- name: Copy .env file for testing
-    #  run: cp .env.example .env.testing
+    - name: Copy .env file for testing
+      run: cp .env.example .env.testing
 
     - name: Configure Laravel for testing
       run: |
         sed -i 's/DB_HOST=host.docker.internal/DB_HOST=mysql/' .env.testing
+        sed -i 's/DB_USERNAME=root/DB_USERNAME=test_user/' .env.testing
+        sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=test_password/' .env.testing
         php artisan key:generate --env=testing
 
     - name: Clear Config

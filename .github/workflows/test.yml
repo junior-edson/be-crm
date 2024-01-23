@@ -13,15 +13,15 @@ defaults:
 jobs:
   test:
     runs-on: ubuntu-latest
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:8.3
 
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:8.0-alpine
         env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE: be_crm_test
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: test_password
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -29,16 +29,6 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
-
-    - name: Get MySQL Container IP
-      id: containerip
-      run: echo ::set-output name=ip::$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' mysql)
-
-    - name: Install MySQL Client
-      run: sudo apt-get install default-mysql-client
-
-    - name: Create Database
-      run: echo "CREATE DATABASE IF NOT EXISTS be_crm_test;" | mysql -h ${{ steps.containerip.outputs.ip }} -u test_user -p'test_password'
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
@@ -49,23 +39,19 @@ jobs:
       run: composer install --no-interaction --prefer-dist
 
     - name: Copy .env file for testing
-      run: cp .env.example .env.testing
+      run: cp .env.ci .env.testing
 
-    - name: Configure Laravel for testing
-      run: |
-        sed -i 's/DB_HOST=host.docker.internal/DB_HOST=mysql/' .env.testing
-        sed -i 's/DB_USERNAME=root/DB_USERNAME=test_user/' .env.testing
-        sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=test_password/' .env.testing
-        php artisan key:generate --env=testing
+    - name: Configure key for testing
+      run: php artisan key:generate --env=testing
 
-    - name: Clear Config
-      run: php artisan config:clear
+    #- name: Clear Config
+    #  run: php artisan config:clear
 
-    - name: Clear Laravel Cache
-      run: php artisan optimize:clear
+    #- name: Clear Laravel Cache
+    #  run: php artisan optimize:clear
 
-    - name: Check .env.testing
-      run: cat .env.testing
+    #- name: Check .env.testing
+    #  run: cat .env.testing
 
     - name: Run Tests
       run: php artisan test --env=testing

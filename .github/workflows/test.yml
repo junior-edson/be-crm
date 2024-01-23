@@ -39,10 +39,11 @@ jobs:
     - name: Copy .env file for testing
       run: cp .env.example .env.testing
 
-    - name: Configure Laravel for testing
-      run: |
-        php artisan migrate --env=testing
-        php artisan key:generate --env=testing
+    - name: Create key for testing
+      run: php artisan key:generate --env=testing
+
+    - name: Clear Config
+      run: php artisan config:clear
 
     - name: Run Tests
       run: php artisan test --env=testing

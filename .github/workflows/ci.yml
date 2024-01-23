@@ -15,14 +15,15 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mysql:
-        image: mysql:8.0
+      postgres:
+        image: postgres:latest
         env:
-          MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: test
+          POSTGRES_DB: test
+          POSTGRES_USER: user_test
+          POSTGRES_PASSWORD: secret_password
         ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          - 5432:5432
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - name: Checkout Repository
@@ -50,9 +51,6 @@ jobs:
 
     - name: Check .env.testing
       run: cat .env.testing
-
-    - name: Wait for MySQL
-      run: dockerize -wait tcp://mysql:3306 -timeout 1m
 
     - name: Run migrations
       run: php artisan migrate --env=testing

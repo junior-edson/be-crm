@@ -51,6 +51,9 @@ jobs:
     - name: Check .env.testing
       run: cat .env.testing
 
+    - name: Wait for MySQL
+      run: dockerize -wait tcp://mysql:3306 -timeout 1m
+
     - name: Run migrations
       run: php artisan migrate --env=testing
 

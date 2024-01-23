@@ -46,4 +46,4 @@ jobs:
         php artisan key:generate --env=testing
 
     - name: Run Tests
-      run: vendor/bin/phpunit --env=testing
+      run: php artisan test

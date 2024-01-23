@@ -36,11 +36,11 @@ jobs:
     - name: Install Dependencies
       run: composer install --no-interaction --prefer-dist
 
-    - name: Copy .env file for testing
-      run: cp .env.ci .env
+    - name: Copy .env.ci file for testing
+      run: cp .env.ci .env.testing
 
     - name: Configure key for testing
-      run: php artisan key:generate
+      run: php artisan key:generate --env=testing
 
     #- name: Clear Config
     #  run: php artisan config:clear
@@ -48,8 +48,8 @@ jobs:
     #- name: Clear Laravel Cache
     #  run: php artisan optimize:clear
 
-    #- name: Check .env.testing
-    #  run: cat .env.testing
+    - name: Check .env.testing
+      run: cat .env.testing
 
     - name: Run Tests
-      run: php artisan test
+      run: php artisan test --parallel

@@ -20,8 +20,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: secret
           MYSQL_DATABASE: be_crm_test
-          MYSQL_USER: user_test
-          MYSQL_PASSWORD: secret
+          MYSQL_USER: test_user
+          MYSQL_PASSWORD: test_password
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -44,8 +44,8 @@ jobs:
     - name: Configure Laravel for testing
       run: |
         sed -i 's/DB_HOST=host.docker.internal/DB_HOST=mysql/' .env.testing
-        sed -i 's/DB_USERNAME=root/DB_USERNAME=user_test/' .env.testing
-        sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=secret/' .env.testing
+        sed -i 's/DB_USERNAME=root/DB_USERNAME=test_user/' .env.testing
+        sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=test_password/' .env.testing
         php artisan key:generate --env=testing
 
     - name: Clear Config
@@ -53,6 +53,9 @@ jobs:
 
     - name: Clear Laravel Cache
       run: php artisan optimize:clear
+
+    - name: Check .env.testing
+      run: cat .env.testing
 
     - name: Run Tests
       run: php artisan test --env=testing

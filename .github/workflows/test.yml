@@ -13,8 +13,6 @@ defaults:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container:
-      image: kirschbaumdevelopment/laravel-test-runner:8.3
 
     services:
       mysql:
@@ -39,10 +37,10 @@ jobs:
       run: composer install --no-interaction --prefer-dist
 
     - name: Copy .env file for testing
-      run: cp .env.ci .env.testing
+      run: cp .env.ci .env
 
     - name: Configure key for testing
-      run: php artisan key:generate --env=testing
+      run: php artisan key:generate
 
     #- name: Clear Config
     #  run: php artisan config:clear
@@ -54,4 +52,4 @@ jobs:
     #  run: cat .env.testing
 
     - name: Run Tests
-      run: php artisan test --env=testing
+      run: php artisan test

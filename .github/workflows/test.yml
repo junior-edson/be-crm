@@ -41,11 +41,8 @@ jobs:
     #- name: Copy .env file for testing
     #  run: cp .env.example .env.testing
 
-    - name: Configure Laravel for testing
-      run: |
-        sed -i 's/DB_HOST=host.docker.internal/DB_HOST=mysql/' .env.testing
-        sed -i 's/DB_USERNAME=root/DB_USERNAME=test_user/' .env.testing
-        php artisan key:generate --env=testing
+    - name: Configure key for testing
+      run: php artisan key:generate --env=testing
 
     - name: Clear Config
       run: php artisan config:clear

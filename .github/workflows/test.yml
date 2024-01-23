@@ -30,6 +30,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
+    - name: Install MySQL Client
+      run: sudo apt-get install default-mysql-client
+
+    - name: Create Database
+      run: echo "CREATE DATABASE IF NOT EXISTS be_crm_test;" | mysql -h mysql -u test_user -p'test_password'
+
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
@@ -44,6 +50,7 @@ jobs:
     - name: Configure Laravel for testing
       run: |
         sed -i 's/DB_HOST=host.docker.internal/DB_HOST=mysql/' .env.testing
+        sed -i 's/DB_USERNAME=root/DB_USERNAME=test_user/' .env.testing
         sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=test_password/' .env.testing
         php artisan key:generate --env=testing
 

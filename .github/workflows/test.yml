@@ -44,7 +44,6 @@ jobs:
     - name: Configure Laravel for testing
       run: |
         sed -i 's/DB_HOST=host.docker.internal/DB_HOST=mysql/' .env.testing
-        sed -i 's/DB_USERNAME=root/DB_USERNAME=test_user/' .env.testing
         sed -i 's/DB_PASSWORD=secret/DB_PASSWORD=test_password/' .env.testing
         php artisan key:generate --env=testing
 

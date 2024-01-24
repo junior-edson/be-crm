@@ -10,11 +10,9 @@ use Tests\TestCase;
 
 class CreateTeamTest extends TestCase
 {
-    use RefreshDatabase;
-
     public function test_teams_can_be_created(): void
     {
-        $this->actingAs($client = User::factory()->withPersonalTeam()->create());
+        $this->actingAs(User::factory()->withPersonalTeam()->create());
 
         Livewire::test(CreateTeamForm::class)
             ->set(['state' => [
@@ -27,7 +25,7 @@ class CreateTeamTest extends TestCase
             ]])
             ->call('createTeam');
 
-        $this->assertCount(1, $client->fresh());
-        $this->assertDatabaseHas('clients', ['name' => 'Test Team']);
+        $this->assertDatabaseCount('teams', 2);
+        $this->assertDatabaseHas('teams', ['name' => 'Test Team']);
     }
 }

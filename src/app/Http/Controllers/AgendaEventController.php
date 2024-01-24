@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateClientRequest;
-use App\Http\Requests\UpdateClientRequest;
-use App\Services\Client\CreateClientService;
-use App\Services\Client\UpdateClientService;
-use Exception;
+use App\Http\Requests\CreateAgendaEventRequest;
+use App\Http\Requests\UpdateAgendaEventRequest;
+use App\Services\Agenda\CreateAgendaEventService;
+use App\Services\Agenda\UpdateAgendaEventService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
-class ClientController extends Controller
+class AgendaEventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,13 +30,15 @@ class ClientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateClientRequest $request, CreateClientService $service): JsonResponse
-    {
+    public function store(
+        CreateAgendaEventRequest $request,
+        CreateAgendaEventService $service
+    ): JsonResponse {
         try {
             $service->execute($request);
 
             return response()->json([], 204);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
@@ -60,16 +62,14 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(
-        UpdateClientRequest $request,
-        string $id,
-        UpdateClientService $service
-    ): JsonResponse {
+    public function update(UpdateAgendaEventRequest $request, int $id): JsonResponse
+    {
         try {
+            $service = new UpdateAgendaEventService();
             $service->execute($request, $id);
 
             return response()->json([], 204);
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }

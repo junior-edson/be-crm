@@ -36,6 +36,9 @@ jobs:
     - name: Install Dependencies
       run: composer install --no-interaction --prefer-dist
 
+    - name: Run build
+      run: npm install && npm run build
+
     - name: Copy .env.ci file for testing
       run: cp .env.ci .env.testing
 

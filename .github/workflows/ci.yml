@@ -1,0 +1,61 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!staging'
+
+defaults:
+  run:
+    working-directory: ./src
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: public.ecr.aws/docker/library/postgres:16.1-alpine3.19
+        env:
+          POSTGRES_DB: test
+          POSTGRES_USER: user_test
+          POSTGRES_PASSWORD: secret_password
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3'
+
+    - name: Install Dependencies
+      run: composer install --no-interaction --prefer-dist
+
+    - name: Run build
+      run: npm install && npm run build
+
+    - name: Copy .env.ci file for testing
+      run: cp .env.ci .env.testing
+
+    - name: Configure key for testing
+      run: php artisan key:generate --env=testing
+
+    - name: Clear Config
+      run: php artisan config:clear
+
+    - name: Clear Laravel Cache
+      run: php artisan optimize:clear
+
+    - name: Check .env.testing
+      run: cat .env.testing
+
+    - name: Run migrations
+      run: php artisan migrate --env=testing
+
+    - name: Run Tests
+      run: php artisan test --parallel

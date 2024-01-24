@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit\Proposal;
 
 use App\Http\Requests\Proposal\CreateProposalRequest;
 use App\Models\Client;

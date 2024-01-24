@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
 use App\Services\Client\UpdateClientService;
 use Exception;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class UpdateClientTest extends TestCase
@@ -38,6 +39,6 @@ class UpdateClientTest extends TestCase
         $this->expectExceptionMessage('Client not found');
 
         $service = new UpdateClientService();
-        $service->execute(new UpdateClientRequest([]), '123456789');
+        $service->execute(new UpdateClientRequest([]), Str::uuid()->toString());
     }
 }

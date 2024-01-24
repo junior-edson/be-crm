@@ -2,7 +2,7 @@
 
 namespace App\Services\Agenda;
 
-use App\Http\Requests\UpdateAgendaEventRequest;
+use App\Http\Requests\Agenda\UpdateAgendaEventRequest;
 use App\Models\AgendaEvent;
 use Exception;
 

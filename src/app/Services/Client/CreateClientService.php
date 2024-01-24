@@ -2,7 +2,7 @@
 
 namespace App\Services\Client;
 
-use App\Http\Requests\CreateClientRequest;
+use App\Http\Requests\Client\CreateClientRequest;
 use App\Models\Client;
 
 class CreateClientService

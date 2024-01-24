@@ -2,7 +2,7 @@
 
 namespace App\Services\Agenda;
 
-use App\Http\Requests\CreateAgendaEventRequest;
+use App\Http\Requests\Agenda\CreateAgendaEventRequest;
 use App\Models\AgendaEvent;
 
 class CreateAgendaEventService

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Client;
 
-use App\Http\Requests\UpdateClientRequest;
+use App\Http\Requests\Client\UpdateClientRequest;
 use App\Models\Client;
 use App\Services\Client\UpdateClientService;
 use Exception;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateClientRequest;
-use App\Http\Requests\UpdateClientRequest;
+use App\Http\Requests\Client\CreateClientRequest;
+use App\Http\Requests\Client\UpdateClientRequest;
 use App\Services\Client\CreateClientService;
 use App\Services\Client\UpdateClientService;
 use Exception;

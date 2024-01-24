@@ -2,7 +2,7 @@
 
 namespace App\Services\Client;
 
-use App\Http\Requests\UpdateClientRequest;
+use App\Http\Requests\Client\UpdateClientRequest;
 use App\Models\Client;
 use Exception;
 

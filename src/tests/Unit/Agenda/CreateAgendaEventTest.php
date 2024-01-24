@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Agenda;
 
-use App\Http\Requests\CreateAgendaEventRequest;
+use App\Http\Requests\Agenda\CreateAgendaEventRequest;
 use App\Models\Client;
 use App\Services\Agenda\CreateAgendaEventService;
 use Carbon\Carbon;

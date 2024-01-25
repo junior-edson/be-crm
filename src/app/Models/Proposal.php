@@ -11,6 +11,8 @@ class Proposal extends Model
 {
     use HasFactory;
 
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = ['team_id', 'client_id', 'code', 'valid_until', 'items'];
     protected $casts = [
         'valid_until' => 'date',

@@ -19,7 +19,7 @@ class ProposalFactory extends Factory
     public function definition(): array
     {
         return [
-            'company_id' => Team::factory()->create(),
+            'team_id' => Team::factory()->create(),
             'client_id' => Client::factory()->create(),
             'code' => fake()->bothify('####/####'),
             'valid_until' => now()->addDays(15),

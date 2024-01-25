@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Proposal;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateAgendaEventRequest extends FormRequest
+class UpdateProposalRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class UpdateAgendaEventRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'client_id' => 'optional|exists:clients,id',
-            'event_datetime' => 'required|date',
-            'address' => 'required',
-            'description' => 'required',
+            'valid_until' => 'required|date',
+            'items' => 'required|array',
         ];
     }
 }

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Client\CreateClientRequest;
-use App\Http\Requests\Client\UpdateClientRequest;
-use App\Services\Client\CreateClientService;
-use App\Services\Client\UpdateClientService;
-use Exception;
+use App\Http\Requests\Proposal\CreateProposalRequest;
+use App\Services\Proposal\CreateProposalService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Exception;
 
-class ClientController extends Controller
+class ProposalController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,12 +29,14 @@ class ClientController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateClientRequest $request, CreateClientService $service): JsonResponse
-    {
+    public function store(
+        CreateProposalRequest $request,
+        CreateProposalService $service
+    ): JsonResponse {
         try {
-            $service->execute($request);
+            $proposal = $service->execute($request);
 
-            return response()->json([], 204);
+            return response()->json($proposal);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -60,18 +61,9 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(
-        UpdateClientRequest $request,
-        string $id,
-        UpdateClientService $service
-    ): JsonResponse {
-        try {
-            $service->execute($request, $id);
-
-            return response()->json([], 204);
-        } catch (Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 500);
-        }
+    public function update(Request $request, string $id)
+    {
+        //
     }
 
     /**

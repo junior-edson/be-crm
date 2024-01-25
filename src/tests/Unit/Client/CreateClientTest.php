@@ -4,7 +4,7 @@ namespace Tests\Unit\Client;
 
 use App\Enums\EnumClientTaxType;
 use App\Enums\EnumClientType;
-use App\Http\Requests\CreateClientRequest;
+use App\Http\Requests\Client\CreateClientRequest;
 use App\Models\Team;
 use App\Services\Client\CreateClientService;
 use Tests\TestCase;

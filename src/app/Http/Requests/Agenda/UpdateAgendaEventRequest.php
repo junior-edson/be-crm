@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Agenda;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateClientRequest extends FormRequest
+class UpdateAgendaEventRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,10 @@ class UpdateClientRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'team_id' => 'required|exists:teams,id',
-            'type' => 'required|in:INDIVIDUAL,COMPANY',
-            'tax_type' => 'required|in:TAX_21_PERCENT,SELF_LIQUIDATION,SUBCONTRACTOR',
-            'registration_code' => 'nullable',
-            'address' => 'required|max:255',
-            'phone' => 'nullable|max:25',
-            'email' => 'nullable|email|max:50',
+            'client_id' => 'optional|exists:clients,id',
+            'event_datetime' => 'required|date',
+            'address' => 'required',
+            'description' => 'required',
         ];
     }
 }

@@ -2,12 +2,12 @@
 
 namespace Tests\Unit\Agenda;
 
-use App\Http\Requests\UpdateAgendaEventRequest;
+use App\Http\Requests\Agenda\UpdateAgendaEventRequest;
 use App\Models\AgendaEvent;
 use App\Services\Agenda\UpdateAgendaEventService;
 use Carbon\Carbon;
-use Tests\TestCase;
 use Exception;
+use Tests\TestCase;
 
 class UpdateAgendaEventTest extends TestCase
 {

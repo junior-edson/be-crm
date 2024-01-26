@@ -24,11 +24,13 @@ class UpdateProposalTest extends TestCase
             'items' => [
                 [
                     'quantity' => 1,
+                    'unit_type' => 'm²',
                     'unit_price' => 100,
                     'description' => 'Item 1',
                 ],
                 [
                     'quantity' => 2,
+                    'unit_type' => 'm²',
                     'unit_price' => 200,
                     'description' => 'Item 2',
                 ],

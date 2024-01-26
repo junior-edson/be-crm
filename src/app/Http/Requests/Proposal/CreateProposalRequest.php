@@ -24,8 +24,8 @@ class CreateProposalRequest extends FormRequest
         return [
             'team_id' => 'required|exists:teams,id',
             'client_id' => 'required|exists:clients,id',
-            'valid_until' => 'required',
-            'items' => 'required',
+            'valid_until' => 'required|date',
+            'items' => 'required|array',
         ];
     }
 }

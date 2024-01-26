@@ -15,6 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignId('team_id')->constrained();
             $table->foreignUuid('client_id')->constrained();
+            $table->string('tax_type');
+            $table->string('currency')->default('EUR');
             $table->string('code');
             $table->date('valid_until');
             $table->json('items');

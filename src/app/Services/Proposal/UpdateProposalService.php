@@ -25,6 +25,9 @@ class UpdateProposalService
 
         $proposal->update($data);
 
+        $proposal->items()->delete();
+        $proposal->items()->createMany($data['items']);
+
         return $proposal->refresh();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\EnumClientTaxType;
 use App\Models\Client;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,6 +23,8 @@ class ProposalFactory extends Factory
             'team_id' => Team::factory()->create(),
             'client_id' => Client::factory()->create(),
             'code' => fake()->bothify('####/####'),
+            'tax_type' => EnumClientTaxType::TAX_21_PERCENT->personTaxes(),
+            'currency' => 'EUR',
             'valid_until' => now()->addDays(15),
             'items' => [
                 [

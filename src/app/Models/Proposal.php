@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 
@@ -13,7 +14,7 @@ class Proposal extends Model
 
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['team_id', 'client_id', 'code', 'valid_until', 'items'];
+    protected $fillable = ['team_id', 'client_id', 'tax_type', 'currency', 'code', 'valid_until', 'items'];
     protected $casts = [
         'valid_until' => 'date',
         'items' => 'array',
@@ -41,5 +42,10 @@ class Proposal extends Model
         $lastProposal = self::whereYear('created_at', $year)->where('team_id', Auth::user()->currentTeam->id)->latest('code')->first();
         $sequence = ($lastProposal) ? intval(substr($lastProposal->code, 0, 3)) + 1 : 1;
         return sprintf('%03d/%d', $sequence, $year);
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(ProposalItem::class);
     }
 }

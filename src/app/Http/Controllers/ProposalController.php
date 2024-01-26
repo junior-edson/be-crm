@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Proposal\CreateProposalRequest;
+use App\Services\Proposal\CreateProposalItemService;
 use App\Services\Proposal\CreateProposalService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,10 +32,10 @@ class ProposalController extends Controller
      */
     public function store(
         CreateProposalRequest $request,
-        CreateProposalService $service
+        CreateProposalService $proposalService
     ): JsonResponse {
         try {
-            $proposal = $service->execute($request);
+            $proposal = $proposalService->execute($request);
 
             return response()->json($proposal);
         } catch (Exception $e) {

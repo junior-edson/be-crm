@@ -9,6 +9,7 @@ use App\Models\ProposalItem;
 use App\Models\Team;
 use App\Models\User;
 use App\Services\Invoice\CreateInvoiceService;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 use Exception;
 
@@ -128,7 +129,7 @@ class CreateInvoiceTest extends TestCase
         $this->actingAs(User::factory()->create(['current_team_id' => $team->id]));
 
         $payload = [
-            'proposal_id' => 1,
+            'proposal_id' => Str::uuid()->toString(),
             'team_id' => $team->id,
             'client_id' => Client::factory()->create()->id,
             'issue_date' => now()->format('Y-m-d'),

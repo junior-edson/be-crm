@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ProposalItem extends Model
+class InvoiceItem extends Model
 {
     use HasFactory;
 
@@ -21,8 +21,8 @@ class ProposalItem extends Model
     /**
      * @return BelongsTo
      */
-    public function proposal(): BelongsTo
+    public function invoice(): BelongsTo
     {
-        return $this->belongsTo(Proposal::class);
+        return $this->belongsTo(Invoice::class);
     }
 }

@@ -44,6 +44,9 @@ class Proposal extends Model
         return sprintf('%03d/%d', $sequence, $year);
     }
 
+    /**
+     * @return HasMany
+     */
     public function items(): HasMany
     {
         return $this->hasMany(ProposalItem::class);

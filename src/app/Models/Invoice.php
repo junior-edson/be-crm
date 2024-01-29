@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
+use Spatie\ModelStates\HasStates;
 
 class Invoice extends Model
 {
     use HasFactory;
+    use HasStates;
 
     public $incrementing = false;
     protected $keyType = 'string';

@@ -7,14 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
+use Spatie\ModelStates\HasStates;
 
 class Proposal extends Model
 {
     use HasFactory;
+    use HasStates;
 
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $fillable = ['team_id', 'client_id', 'tax_type', 'currency', 'code', 'valid_until', 'items'];
+    protected $fillable = ['team_id', 'client_id', 'tax_type', 'currency', 'code', 'valid_until', 'status', 'items'];
     protected $casts = [
         'valid_until' => 'date',
         'items' => 'array',

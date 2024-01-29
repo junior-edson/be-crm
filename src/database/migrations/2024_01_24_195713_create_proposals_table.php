@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('code');
             $table->date('valid_until');
             $table->json('items');
+            $table->string('state');
             $table->timestamps();
         });
     }

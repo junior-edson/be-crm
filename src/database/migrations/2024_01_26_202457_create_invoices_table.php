@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('currency')->default('EUR');
             $table->date('issue_date')->nullable();
             $table->date('due_date')->nullable();
-            $table->enum('status', ['DRAFT', 'SENT', 'PAID', 'CANCELLED'])->default('DRAFT');
+            $table->string('state');
             $table->timestamps();
         });
     }

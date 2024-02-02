@@ -4,6 +4,8 @@ namespace Tests\Unit\Agenda;
 
 use App\Http\Requests\Agenda\CreateAgendaEventRequest;
 use App\Models\Client;
+use App\Models\Team;
+use App\Models\User;
 use App\Services\Agenda\CreateAgendaEventService;
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -12,6 +14,8 @@ class CreateAgendaEventTest extends TestCase
 {
     public function testCreateAgendaEventWithClient()
     {
+        $team = Team::factory()->create();
+        $this->actingAs(User::factory()->create(['current_team_id' => $team->id]));
         $client = Client::factory()->create();
 
         $payload = [

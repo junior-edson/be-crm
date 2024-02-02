@@ -33,15 +33,6 @@
                         <!--begin::Name-->
                         <a href="#" class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">{{ $user->name }}</a>
                         <!--end::Name-->
-                        <!--begin::Position-->
-                        <div class="mb-9">
-                            @foreach($user->roles as $role)
-                                <!--begin::Badge-->
-                                <div class="badge badge-lg badge-light-primary d-inline">{{ ucwords($role->name) }}</div>
-                                <!--begin::Badge-->
-                            @endforeach
-                        </div>
-                        <!--end::Position-->
                         <!--begin::Info-->
                         <!--begin::Info heading-->
                         <div class="fw-bold mb-3">Assigned Tickets

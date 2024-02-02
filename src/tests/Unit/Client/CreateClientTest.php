@@ -6,6 +6,7 @@ use App\Enums\EnumClientTaxType;
 use App\Enums\EnumClientType;
 use App\Http\Requests\Client\CreateClientRequest;
 use App\Models\Team;
+use App\Models\User;
 use App\Services\Client\CreateClientService;
 use Tests\TestCase;
 
@@ -13,8 +14,11 @@ class CreateClientTest extends TestCase
 {
     public function testCreateIndividualClient()
     {
+        $team = Team::factory()->create();
+        $this->actingAs(User::factory()->create(['current_team_id' => $team->id]));
+
         $payload = [
-            'team_id' => Team::factory()->create()->id,
+            'team_id' => $team->id,
             'type' => EnumClientType::INDIVIDUAL,
             'tax_type' => EnumClientTaxType::TAX_21_PERCENT->personTaxes(),
             'registration_code' => null,

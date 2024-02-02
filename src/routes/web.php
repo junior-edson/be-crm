@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClientManagementController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\RoleManagementController;
 use App\Http\Controllers\PermissionManagementController;
@@ -26,11 +26,14 @@ Route::middleware([
         return view('pages.dashboards.index');
     })->name('dashboard');
 
-    Route::resource('clients', ClientController::class);
+    Route::resource('clients', ClientManagementController::class);
 
     Route::name('user-management.')->group(function () {
         Route::resource('/user-management/users', UserManagementController::class);
-        Route::resource('/user-management/roles', RoleManagementController::class);
         Route::resource('/user-management/permissions', PermissionManagementController::class);
+    });
+
+    Route::name('client-management.')->group(function () {
+        Route::resource('/client-management/clients', ClientManagementController::class);
     });
 });

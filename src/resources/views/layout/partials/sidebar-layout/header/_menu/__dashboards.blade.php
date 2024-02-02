@@ -11,7 +11,7 @@
 					<!--begin:Menu item-->
 					<div class="menu-item p-0 m-0">
 						<!--begin:Menu link-->
-						<a href="{{ route('dashboard') }}" class="menu-link active">
+						<a href="{{ route('dashboard') }}" class="menu-link">
 							<span class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">{!! getIcon('element-11', 'text-primary fs-1') !!}</span>
 							<span class="d-flex flex-column">
 								<span class="fs-6 fw-bold text-gray-800">{{ __('Default') }}</span>
@@ -31,8 +31,8 @@
 						<a href="{{ route('dashboard') }}" class="menu-link">
 							<span class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">{!! getIcon('people', 'text-danger fs-1') !!}</span>
 							<span class="d-flex flex-column">
-								<span class="fs-6 fw-bold text-gray-800">{{ __('Clients') }}</span>
-								<span class="fs-7 fw-semibold text-muted">{{ __('Clients management') }}</span>
+								<span class="fs-6 fw-bold text-gray-800">{{ __('Users') }}</span>
+								<span class="fs-7 fw-semibold text-muted">{{ __('Those who use our system') }}</span>
 							</span>
 						</a>
 						<!--end:Menu link-->

@@ -4,6 +4,8 @@ namespace Tests\Unit\Client;
 
 use App\Http\Requests\Client\UpdateClientRequest;
 use App\Models\Client;
+use App\Models\Team;
+use App\Models\User;
 use App\Services\Client\UpdateClientService;
 use Exception;
 use Illuminate\Support\Str;
@@ -16,6 +18,8 @@ class UpdateClientTest extends TestCase
      */
     public function testUpdateIndividualClient()
     {
+        $team = Team::factory()->create();
+        $this->actingAs(User::factory()->create(['current_team_id' => $team->id]));
         $client = Client::factory()->create();
 
         $payload = [

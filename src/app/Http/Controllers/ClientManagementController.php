@@ -9,7 +9,7 @@ use App\Services\Client\UpdateClientService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 
-class ClientController extends Controller
+class ClientManagementController extends Controller
 {
     /**
      * Display a listing of the resource.

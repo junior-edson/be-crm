@@ -8,7 +8,7 @@
         <div class="app-page flex-column flex-column-fluid" id="kt_app_page">
             @include(config('settings.KT_THEME_LAYOUT_DIR').'/partials/sidebar-layout/_header')
             <!--begin::Main-->
-            <div style="padding-top: 70px;" class="app-main flex-column flex-row-fluid" id="kt_app_main">
+            <div style="padding-top: 85px;" class="app-main flex-column flex-row-fluid" id="kt_app_main">
                 <!--begin::Content wrapper-->
                 <div class="d-flex flex-column flex-column-fluid">
                     @include(config('settings.KT_THEME_LAYOUT_DIR').'/partials/sidebar-layout/_toolbar')

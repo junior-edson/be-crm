@@ -6,18 +6,12 @@
 		<div class="mb-10">
 			<!--begin::Title-->
 			<div class="fs-2hx fw-bold text-gray-800 text-center mb-13">
-			<span class="me-2">Try our all new Enviroment with
-			<br />
-			<span class="position-relative d-inline-block text-danger">
-				<a href="#" class="text-danger opacity-75-hover">Pro Plan</a>
-				<!--begin::Separator-->
-				<span class="position-absolute opacity-15 bottom-0 start-0 border-4 border-danger border-bottom w-100"></span>
-				<!--end::Separator-->
-			</span></span>for Free</div>
+			    You have no appointments today
+            </div>
 			<!--end::Title-->
 			<!--begin::Action-->
 			<div class="text-center">
-				<a href='#' class="btn btn-sm btn-dark fw-bold" data-bs-toggle="modal" data-bs-target="#kt_modal_upgrade_plan">Upgrade Now</a>
+				<a href='#' class="btn btn-sm btn-dark fw-bold" data-bs-toggle="modal" data-bs-target="#kt_modal_view_users">Test</a>
 			</div>
 			<!--begin::Action-->
 		</div>

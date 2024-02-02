@@ -45,7 +45,7 @@
 				<!--begin:Menu link-->
 				<span class="menu-link">
 					<span class="menu-icon">{!! getIcon('abstract-28', 'fs-2') !!}</span>
-					<span class="menu-title">User Management</span>
+					<span class="menu-title">Registration Management</span>
 					<span class="menu-arrow"></span>
 				</span>
 				<!--end:Menu link-->

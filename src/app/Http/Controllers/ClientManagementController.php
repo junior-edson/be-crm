@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ClientsDataTable;
 use App\Http\Requests\Client\CreateClientRequest;
 use App\Http\Requests\Client\UpdateClientRequest;
 use App\Services\Client\CreateClientService;
@@ -14,9 +15,9 @@ class ClientManagementController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(ClientsDataTable $dataTable)
     {
-        //
+        return $dataTable->render('pages/apps.client-management.clients.list');
     }
 
     /**

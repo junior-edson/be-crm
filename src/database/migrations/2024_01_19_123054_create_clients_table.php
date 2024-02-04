@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('team_id')->constrained();
             $table->enum('type', EnumClientType::getValues());
             $table->enum('tax_type', EnumClientTaxType::getValues());
+            $table->string('name');
             $table->string('registration_code')->nullable();
             $table->string('address');
             $table->string('phone')->nullable();

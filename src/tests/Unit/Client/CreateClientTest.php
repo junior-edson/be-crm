@@ -21,6 +21,7 @@ class CreateClientTest extends TestCase
             'team_id' => $team->id,
             'type' => EnumClientType::INDIVIDUAL,
             'tax_type' => EnumClientTaxType::TAX_21_PERCENT->personTaxes(),
+            'name' => 'Test Name',
             'registration_code' => null,
             'address' => '123 Main St',
             'phone' => '1234567890',

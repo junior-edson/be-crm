@@ -24,6 +24,7 @@ class ClientFactory extends Factory
             'team_id' => Team::factory()->create(),
             'type' => EnumClientType::INDIVIDUAL,
             'tax_type' => EnumClientTaxType::TAX_21_PERCENT->personTaxes(),
+            'name' => $this->faker->name(),
             'registration_code' => null,
             'address' => $this->faker->address(),
             'phone' => $this->faker->phoneNumber(),

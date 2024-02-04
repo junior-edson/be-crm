@@ -23,6 +23,7 @@ class UpdateClientTest extends TestCase
         $client = Client::factory()->create();
 
         $payload = [
+            'name' => 'John Doe',
             'registration_code' => null,
             'phone' => '1234567890',
             'email' => 'test@email.com',

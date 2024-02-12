@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 
 class Client extends Model
@@ -21,6 +22,8 @@ class Client extends Model
         'address',
         'phone',
         'email',
+        'is_npo',
+        'is_building_older_than_10_years',
     ];
 
     /**
@@ -34,6 +37,7 @@ class Client extends Model
 
         static::creating(function ($model) {
             $model->id = Uuid::uuid4()->toString();
+            $model->team_id = Auth::user()->currentTeam->id;
         });
     }
 }

@@ -1,28 +1,34 @@
-<x-guest-layout>
-    <x-authentication-card>
-        <x-slot name="logo">
-            <x-authentication-card-logo />
-        </x-slot>
+<x-auth-layout>
+    <!--begin::Forgot Password Form-->
+    <form class="form w-100 " novalidate="novalidate" id="kt_password_reset_form" action="{{ route('password.email') }}">
+    @csrf
 
-        <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-            {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+    <!--begin::Heading-->
+        <div class="text-center mb-10">
+            <!--begin::Title-->
+            <h1 class="text-gray-900 fw-bolder mb-3">Confirm Password</h1>
+            <!--end::Title-->
+            <!--begin::Link-->
+            <div class="text-gray-500 fw-semibold fs-6">This is a secure area of the application. Please confirm your password before continuing.</div>
+            <!--end::Link-->
         </div>
+        <!--begin::Heading-->
+        <!--begin::Input group=-->
+        <div class="fv-row mb-8 fv-plugins-icon-container">
+            <!--begin::Email-->
+            <input placeholder="Password" type="password" name="password" autocomplete="current-password" class="form-control bg-transparent">
+            <!--end::Email-->
+        </div>
+        <!--begin::Actions-->
+        <div class="d-flex flex-wrap justify-content-center pb-lg-0">
+            <button type="button" id="kt_password_reset_submit" class="btn btn-primary me-4">
+                @include('partials.general._button-indicator')
+            </button>
+            <a href="{{ route('login') }}" class="btn btn-light">Cancel</a>
+        </div>
+        <!--end::Actions-->
+        <div></div>
+    </form>
+    <!--end::Forgot Password Form-->
 
-        <x-validation-errors class="mb-4" />
-
-        <form method="POST" action="{{ route('password.confirm') }}">
-            @csrf
-
-            <div>
-                <x-label for="password" value="{{ __('Password') }}" />
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" autofocus />
-            </div>
-
-            <div class="flex justify-end mt-4">
-                <x-button class="ms-4">
-                    {{ __('Confirm') }}
-                </x-button>
-            </div>
-        </form>
-    </x-authentication-card>
-</x-guest-layout>
+</x-auth-layout>

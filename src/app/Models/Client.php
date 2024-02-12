@@ -22,6 +22,8 @@ class Client extends Model
         'address',
         'phone',
         'email',
+        'is_npo',
+        'is_building_older_than_10_years',
     ];
 
     /**

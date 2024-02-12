@@ -27,6 +27,7 @@ class UpdateClientTest extends TestCase
             'registration_code' => null,
             'phone' => '1234567890',
             'email' => 'test@email.com',
+            'is_npo' => true,
         ];
         $request = new UpdateClientRequest($payload);
 

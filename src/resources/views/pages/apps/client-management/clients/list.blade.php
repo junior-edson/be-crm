@@ -16,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search client" id="mySearchInput"/>
+                    <input type="text" data-kt-client-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search client" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
             </div>
@@ -25,18 +25,18 @@
             <!--begin::Card toolbar-->
             <div class="card-toolbar">
                 <!--begin::Toolbar-->
-                <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-                    <!--begin::Add user-->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">
+                <div class="d-flex justify-content-end" data-kt-client-table-toolbar="base">
+                    <!--begin::Add client-->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_client">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
                         Create new client
                     </button>
-                    <!--end::Add user-->
+                    <!--end::Add client-->
                 </div>
                 <!--end::Toolbar-->
 
                 <!--begin::Modal-->
-                <livewire:user.add-user-modal></livewire:user.add-user-modal>
+                <livewire:client.add-client-modal></livewire:client.add-client-modal>
                 <!--end::Modal-->
             </div>
             <!--end::Card toolbar-->
@@ -62,7 +62,7 @@
             });
             document.addEventListener('livewire:init', function () {
                 Livewire.on('success', function () {
-                    $('#kt_modal_add_user').modal('hide');
+                    $('#kt_modal_add_client').modal('hide');
                     window.LaravelDataTables['clients-table'].ajax.reload();
                 });
             });

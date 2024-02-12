@@ -26,6 +26,8 @@ class CreateClientTest extends TestCase
             'address' => '123 Main St',
             'phone' => '1234567890',
             'email' => 'test@email.com',
+            'is_npo' => false,
+            'is_building_older_than_10_years' => true,
         ];
         $request = new CreateClientRequest($payload);
 

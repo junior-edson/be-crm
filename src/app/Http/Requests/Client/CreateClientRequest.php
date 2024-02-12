@@ -23,7 +23,7 @@ class CreateClientRequest extends FormRequest
             'team_id' => 'required|exists:teams,id',
             'type' => 'required|in:INDIVIDUAL,COMPANY',
             'tax_type' => 'required|in:TAX_21_PERCENT,SELF_LIQUIDATION,SUBCONTRACTOR',
-            'registration_code' => 'nullable',
+            'registration_code' => 'required_if:type,COMPANY|max:50',
             'address' => 'required|max:255',
             'phone' => 'nullable|max:25',
             'email' => 'nullable|email|max:50',

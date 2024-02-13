@@ -86,9 +86,7 @@
                     let calendarEl = document.getElementById('kt_calendar_app');
                     let todayDate = moment().startOf('day');
                     let YM = todayDate.format('YYYY-MM');
-                    let YESTERDAY = todayDate.clone().subtract(1, 'day').format('YYYY-MM-DD');
                     let TODAY = todayDate.format('YYYY-MM-DD');
-                    let TOMORROW = todayDate.clone().add(1, 'day').format('YYYY-MM-DD');
 
                     calendar = new FullCalendar.Calendar(calendarEl, {
                         locale: 'pt-br',
@@ -149,21 +147,21 @@
                                 'calendar_event_name': {
                                     validators: {
                                         notEmpty: {
-                                            message: 'Event name is required'
+                                            message: '{{ __('Event name is required') }}'
                                         }
                                     }
                                 },
                                 'calendar_event_start_date': {
                                     validators: {
                                         notEmpty: {
-                                            message: 'Start date is required'
+                                            message: '{{ __('Start date is required') }}'
                                         }
                                     }
                                 },
                                 'calendar_event_end_date': {
                                     validators: {
                                         notEmpty: {
-                                            message: 'End date is required'
+                                            message: '{{ __('End date is required') }}'
                                         }
                                     }
                                 }
@@ -184,7 +182,7 @@
                 // Initialize datepickers --- more info: https://flatpickr.js.org/
                 const initDatepickers = () => {
                     startFlatpickr = flatpickr(startDatepicker, {
-                        enableTime: false,
+                        enableTime: true,
                         dateFormat: "Y-m-d",
                     });
 
@@ -270,10 +268,10 @@
 
                                         // Show popup confirmation
                                         Swal.fire({
-                                            text: "New event added to calendar!",
+                                            text: "{{ __('New event added to calendar!') }}",
                                             icon: "success",
                                             buttonsStyling: false,
-                                            confirmButtonText: "Ok, got it!",
+                                            confirmButtonText: "{{ __('Ok, got it!') }}",
                                             customClass: {
                                                 confirmButton: "btn btn-primary"
                                             }
@@ -324,10 +322,10 @@
                                 } else {
                                     // Show popup warning
                                     Swal.fire({
-                                        text: "Sorry, looks like there are some errors detected, please try again.",
+                                        text: "{{ __('Sorry, looks like there are some errors detected, please try again.') }}",
                                         icon: "error",
                                         buttonsStyling: false,
-                                        confirmButtonText: "Ok, got it!",
+                                        confirmButtonText: "{{ __('Ok, got it!') }}",
                                         customClass: {
                                             confirmButton: "btn btn-primary"
                                         }
@@ -341,7 +339,7 @@
                 // Handle edit event
                 const handleEditEvent = () => {
                     // Update modal title
-                    modalTitle.innerText = "Edit an Event";
+                    modalTitle.innerText = "{{ __('Edit an Event') }}";
                     modal.show();
 
                     // Select datepicker wrapper elements
@@ -386,10 +384,10 @@
 
                                         // Show popup confirmation
                                         Swal.fire({
-                                            text: "New event added to calendar!",
+                                            text: "{{ __('New event added to calendar!') }}",
                                             icon: "success",
                                             buttonsStyling: false,
-                                            confirmButtonText: "Ok, got it!",
+                                            confirmButtonText: "{{ __('Ok, got it!') }}",
                                             customClass: {
                                                 confirmButton: "btn btn-primary"
                                             }
@@ -443,10 +441,10 @@
                                 } else {
                                     // Show popup warning
                                     Swal.fire({
-                                        text: "Sorry, looks like there are some errors detected, please try again.",
+                                        text: "{{ __('Sorry, looks like there are some errors detected, please try again.') }}",
                                         icon: "error",
                                         buttonsStyling: false,
-                                        confirmButtonText: "Ok, got it!",
+                                        confirmButtonText: "{{ __('Ok, got it!') }}",
                                         customClass: {
                                             confirmButton: "btn btn-primary"
                                         }

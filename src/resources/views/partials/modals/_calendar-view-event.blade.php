@@ -8,7 +8,7 @@
             <!--begin::Modal header-->
             <div class="modal-header border-0 justify-content-end">
                 <!--begin::Edit-->
-                <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary me-2" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Edit Event" id="kt_modal_view_event_edit">
+                <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary me-2" data-bs-toggle="tooltip" data-bs-dismiss="click" title="{{ __('Edit event') }}" id="kt_modal_view_event_edit">
                     <i class="ki-duotone ki-pencil fs-2">
                         <span class="path1"></span>
                         <span class="path2"></span>
@@ -16,7 +16,7 @@
                 </div>
                 <!--end::Edit-->
                 <!--begin::Edit-->
-                <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-danger me-2" data-bs-toggle="tooltip" data-bs-dismiss="click" title="Delete Event" id="kt_modal_view_event_delete">
+                <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-danger me-2" data-bs-toggle="tooltip" data-bs-dismiss="click" title="{{ __('Delete event') }}" id="kt_modal_view_event_delete">
                     <i class="ki-duotone ki-trash fs-2">
                         <span class="path1"></span>
                         <span class="path2"></span>
@@ -27,7 +27,7 @@
                 </div>
                 <!--end::Edit-->
                 <!--begin::Close-->
-                <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Event" data-bs-dismiss="modal">
+                <div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="{{ __('Hide event') }}" data-bs-dismiss="modal">
                     <i class="ki-duotone ki-cross fs-2x">
                         <span class="path1"></span>
                         <span class="path2"></span>
@@ -70,7 +70,7 @@
                     <!--end::Bullet-->
                     <!--begin::Event start date/time-->
                     <div class="fs-6">
-                        <span class="fw-bold">Starts</span>
+                        <span class="fw-bold">{{ __('Starts') }}</span>
                         <span data-kt-calendar="event_start_date"></span>
                     </div>
                     <!--end::Event start date/time-->
@@ -83,7 +83,7 @@
                     <!--end::Bullet-->
                     <!--begin::Event end date/time-->
                     <div class="fs-6">
-                        <span class="fw-bold">Ends</span>
+                        <span class="fw-bold">{{ __('Ends') }}</span>
                         <span data-kt-calendar="event_end_date"></span>
                     </div>
                     <!--end::Event end date/time-->

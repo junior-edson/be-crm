@@ -7,15 +7,16 @@ use App\Http\Requests\Agenda\UpdateAgendaEventRequest;
 use App\Services\Agenda\CreateAgendaEventService;
 use App\Services\Agenda\UpdateAgendaEventService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class AgendaEventController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('pages.apps.agenda.event.index');
     }
 
     /**

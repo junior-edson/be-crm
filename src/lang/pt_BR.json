@@ -36,10 +36,21 @@
     "Manage and log out your active sessions on other browsers and devices.": "Gerencie e finalize sessões ativas em outros navegadores e dispositivos.",
     "This device": "Este aparelho",
     "If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.": "Se necessário, você pode finalizar todas as sessões de todos os seus dispositivos. Algumas de suas sessões recentes estão listadas abaixo. Se achar que sua conta foi comprometida, atualize a sua senha.",
+    "Password": "Senha",
+    "Remember me": "Lembrar acesso",
+    "Forgot your password?": "Esqueceu sua senha?",
+    "Registration code": "TVA/BTW",
+    "Address": "Endereço",
+    "Phone number": "Número de telefone",
+    "Website": "Site da empresa",
+    "Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.": "Digite sua senha para confirmar que deseja sair das outras sessões do navegador em todos os seus dispositivos.",
+
     "_BUTTONS": {},
     "Create": "Criar",
     "Save": "Salvar",
     "Add": "Adicionar",
     "Enable": "Habilitar",
-    "Log Out Other Browser Sessions": "Finalizar outras sessões"
+    "Log Out Other Browser Sessions": "Finalizar outras sessões",
+    "Log in": "Entrar",
+    "Cancel": "Cancelar"
 }

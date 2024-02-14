@@ -6,7 +6,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" id="kt_modal_add_client_header">
                 <!--begin::Modal title-->
-                <h2 class="fw-bold">Client</h2>
+                <h2 class="fw-bold">{{ __('Client') }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal" aria-label="Close">
@@ -29,7 +29,7 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-8 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid">
                             <!--begin::Label-->
-                            <label class="fs-6 fw-semibold mb-2 required">Type</label>
+                            <label class="fs-6 fw-semibold mb-2 required">{{ __('Type') }}</label> 
                             <!--end::Label-->
 
                             <!--begin::Row-->
@@ -92,12 +92,12 @@
                             <div class="mb-3">
                                 <!--begin::Label-->
                                 <label class="d-flex align-items-center fs-5 fw-semibold">
-                                    <span class="required">Tax type</span>
+                                    <span class="required">{{ __('Tax type') }}</span>
                                 </label>
                                 <!--end::Label-->
 
                                 <!--begin::Description-->
-                                <div class="fs-7 fw-semibold text-muted">System will validate the tax according to the client type</div>
+                                <div class="fs-7 fw-semibold text-muted">{{ __('System will validate the tax according to the client type') }}</div>
                                 <!--end::Description-->
                             </div>
                             <!--end::Heading-->
@@ -144,11 +144,11 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-2">Name</label>
+                            <label class="required fw-semibold fs-6 mb-2">{{ __('Name') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" wire:model="name" name="name"
-                                   class="form-control form-control-solid mb-3 mb-lg-0" placeholder="Name"/>
+                                   class="form-control form-control-solid mb-3 mb-lg-0" placeholder="{{ __('Name') }}"/>
                             <!--end::Input-->
                             @error('name')
                             <span class="text-danger">{{ $message }}</span>
@@ -158,7 +158,7 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-7 col-6" wire:ignore id="registrationCodeField">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-2">Registration code</label>
+                            <label class="required fw-semibold fs-6 mb-2">{{ __('Registration code') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" wire:model="registration_code" name="registration_code"
@@ -172,7 +172,7 @@
                         <!--begin::Input group-->
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
-                            <label class="required fw-semibold fs-6 mb-2">Address</label>
+                            <label class="required fw-semibold fs-6 mb-2">{{ __('Address') }}</label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" wire:model="address" name="address"
@@ -187,7 +187,7 @@
                         <div class="row mb-7">
                             <div class="col-6">
                                 <!--begin::Label-->
-                                <label class="fw-semibold fs-6 mb-2">Phone</label>
+                                <label class="fw-semibold fs-6 mb-2">{{ __('Phone') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="text" wire:model="phone" name="phone"
@@ -199,7 +199,7 @@
                             </div>
                             <div class="col-6">
                                 <!--begin::Label-->
-                                <label class="fw-semibold fs-6 mb-2">Email</label>
+                                <label class="fw-semibold fs-6 mb-2">{{ __('Email') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="email" wire:model="email" name="email"
@@ -222,8 +222,8 @@
 
                                 <!--begin::Label-->
                                 <label class="form-check-label" for="kt_modal_update_email_notification_0">
-                                    <div class="fw-bold">Is this a Non-Profit Organization (NPO)?</div>
-                                    <div class="text-gray-600">If this option is checked, then this customer will not be taxed.</div>
+                                    <div class="fw-bold">{{ __('Is this a Non-Profit Organization (NPO)?') }}</div>
+                                    <div class="text-gray-600">{{ __('If this option is checked, then this customer will not be taxed.') }}</div>
                                 </label>
                                 <!--end::Label-->
                             </div>
@@ -244,8 +244,8 @@
 
                                 <!--begin::Label-->
                                 <label class="form-check-label" for="kt_modal_update_email_notification_0">
-                                    <div class="fw-bold">Is the building older than 10 years?</div>
-                                    <div class="text-gray-600">If this option is checked, then tax applied will be 6%. Otherwise, it will be 21%.</div>
+                                    <div class="fw-bold">{{ __('Is the building older than 10 years?') }}</div>
+                                    <div class="text-gray-600">{{ __('If this option is checked, then tax applied will be 6%. Otherwise, it will be 21%.') }}</div>
                                 </label>
                                 <!--end::Label-->
                             </div>
@@ -265,7 +265,7 @@
                         <button type="submit" class="btn btn-primary" data-kt-clients-modal-action="submit">
                             <span class="indicator-label" wire:loading.remove>{{ __('Submit') }}</span>
                             <span class="indicator-progress" wire:loading wire:target="submit">
-                                {{ __('Please wait...') }}...
+                                {{ __('Please wait...') }}
                                 <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                             </span>
                         </button>

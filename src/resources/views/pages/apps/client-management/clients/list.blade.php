@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-        Clients
+        {{ __('Clients')}}
     @endsection
 
     @section('breadcrumbs')
@@ -16,7 +16,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center position-relative my-1">
                     {!! getIcon('magnifier', 'fs-3 position-absolute ms-5') !!}
-                    <input type="text" data-kt-client-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="Search client" id="mySearchInput"/>
+                    <input type="text" data-kt-client-table-filter="search" class="form-control form-control-solid w-250px ps-13" placeholder="{{ __('Search client') }}" id="mySearchInput"/>
                 </div>
                 <!--end::Search-->
             </div>
@@ -29,7 +29,7 @@
                     <!--begin::Add client-->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_client">
                         {!! getIcon('plus', 'fs-2', '', 'i') !!}
-                        Create new client
+                        {{ __('Create new client') }}
                     </button>
                     <!--end::Add client-->
                 </div>

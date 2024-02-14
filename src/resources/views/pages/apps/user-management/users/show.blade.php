@@ -1,7 +1,7 @@
 <x-default-layout>
 
     @section('title')
-        Users
+        {{ __('Users') }}
     @endsection
 
     @section('breadcrumbs')

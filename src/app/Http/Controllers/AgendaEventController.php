@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Agenda\CreateAgendaEventRequest;
 use App\Http\Requests\Agenda\UpdateAgendaEventRequest;
+use App\Models\AgendaEvent;
 use App\Services\Agenda\CreateAgendaEventService;
 use App\Services\Agenda\DeleteAgendaEventService;
 use App\Services\Agenda\GetAgendaEventService;
 use App\Services\Agenda\UpdateAgendaEventService;
 use App\Services\Client\GetClientService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AgendaEventController extends Controller
@@ -52,9 +54,9 @@ class AgendaEventController extends Controller
     {
         try {
             $service = new UpdateAgendaEventService();
-            $service->execute($request, $id);
+            $data = $service->execute($request, $id);
 
-            return response()->json([], 204);
+            return response()->json($data, 201);
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }

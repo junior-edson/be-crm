@@ -11,10 +11,10 @@ class UpdateAgendaEventService
     /**
      * @param UpdateAgendaEventRequest $request
      * @param int $agendaEventId
-     * @return void
+     * @return array
      * @throws Exception
      */
-    public function execute(UpdateAgendaEventRequest $request, int $agendaEventId): void
+    public function execute(UpdateAgendaEventRequest $request, int $agendaEventId): array
     {
         $data = $request->all();
         $event = AgendaEvent::find($agendaEventId);
@@ -23,5 +23,7 @@ class UpdateAgendaEventService
             throw new Exception('Agenda event not found');
         }
         $event->update($data);
+
+        return $data;
     }
 }

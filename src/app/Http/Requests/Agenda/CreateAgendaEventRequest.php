@@ -26,7 +26,7 @@ class CreateAgendaEventRequest extends FormRequest
             'description' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'initial_date' => 'required|date_format:Y-m-d',
-            'final_date' => 'required|nullable|date_format:Y-m-d',
+            'final_date' => 'required|nullable|date_format:Y-m-d|after_or_equal:initial_date',
         ];
 
         if ($this->has('client_id') && $this->filled('client_id')) {

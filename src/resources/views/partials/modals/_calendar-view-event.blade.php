@@ -102,6 +102,7 @@
                     <!--end::Icon-->
                     <!--begin::Event location-->
                     <div class="fs-6" data-kt-calendar="event_client"></div>
+                    <div class="fs-6 d-none" data-kt-calendar="event_client_id"></div>
                     <!--end::Event location-->
                 </div>
                 <!--end::Row-->

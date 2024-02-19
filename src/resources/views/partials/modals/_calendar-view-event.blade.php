@@ -92,6 +92,22 @@
                 <!--begin::Row-->
                 <div class="d-flex align-items-center">
                     <!--begin::Icon-->
+                    <i class="ki-duotone ki-shop fs-1 text-muted me-5">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                        <span class="path3"></span>
+                        <span class="path4"></span>
+                        <span class="path5"></span>
+                    </i>
+                    <!--end::Icon-->
+                    <!--begin::Event location-->
+                    <div class="fs-6" data-kt-calendar="event_client"></div>
+                    <!--end::Event location-->
+                </div>
+                <!--end::Row-->
+                <!--begin::Row-->
+                <div class="d-flex align-items-center">
+                    <!--begin::Icon-->
                     <i class="ki-duotone ki-geolocation fs-1 text-muted me-5">
                         <span class="path1"></span>
                         <span class="path2"></span>

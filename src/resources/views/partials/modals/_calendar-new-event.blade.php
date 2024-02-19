@@ -6,7 +6,8 @@
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Form-->
-            <form class="form" action="#" id="kt_modal_add_event_form">
+            <form class="form" action="{{ route('agenda.event.store') }}" id="kt_modal_add_event_form">
+                @csrf
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
@@ -27,30 +28,42 @@
                     <!--begin::Input group-->
                     <div class="fv-row mb-9">
                         <!--begin::Label-->
+                        <label class="fs-6 fw-semibold mb-2">{{ __('Client') }}</label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <select name="client_id" aria-label="{{ __('Select a client...') }}" data-control="select2" data-placeholder="{{ __('Select a client...') }}" class="form-select form-select-solid form-select-lg">
+                            <option value="">{{ __('Select a client...') }}</option>
+                        </select>
+                        <!--end::Input-->
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="fv-row mb-9">
+                        <!--begin::Label-->
                         <label class="fs-6 fw-semibold required mb-2">{{ __('Event name') }}</label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" placeholder="" name="calendar_event_name" />
+                        <input type="text" class="form-control form-control-solid" placeholder="" name="name" />
                         <!--end::Input-->
                     </div>
                     <!--end::Input group-->
                     <!--begin::Input group-->
                     <div class="fv-row mb-9">
                         <!--begin::Label-->
-                        <label class="fs-6 fw-semibold mb-2">{{ __('Description') }}</label>
+                        <label class="fs-6 fw-semibold required mb-2">{{ __('Description') }}</label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" placeholder="" name="calendar_event_description" />
+                        <input type="text" class="form-control form-control-solid" placeholder="" name="description" />
                         <!--end::Input-->
                     </div>
                     <!--end::Input group-->
                     <!--begin::Input group-->
                     <div class="fv-row mb-9">
                         <!--begin::Label-->
-                        <label class="fs-6 fw-semibold mb-2">{{ __('Location') }}</label>
+                        <label class="fs-6 fw-semibold required mb-2">{{ __('Location') }}</label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" placeholder="" name="calendar_event_location" />
+                        <input type="text" class="form-control form-control-solid" placeholder="" name="address" />
                         <!--end::Input-->
                     </div>
                     <!--end::Input group-->
@@ -69,20 +82,20 @@
                         <div class="col">
                             <div class="fv-row mb-9">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2 required">{{ __('Data inicial') }}</label>
+                                <label class="fs-6 fw-semibold mb-2 required">{{ __('Initial date') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input class="form-control form-control-solid" name="calendar_event_start_date" placeholder="Pick a start date" id="kt_calendar_datepicker_start_date" />
+                                <input class="form-control form-control-solid" name="initial_date" placeholder="Pick a start date" id="kt_calendar_datepicker_start_date" />
                                 <!--end::Input-->
                             </div>
                         </div>
                         <div class="col" data-kt-calendar="datepicker">
                             <div class="fv-row mb-9">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2">{{ __('Hora inicial') }}</label>
+                                <label class="fs-6 fw-semibold mb-2 required">{{ __('Initial time') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input class="form-control form-control-solid" name="calendar_event_start_time" placeholder="Pick a start time" id="kt_calendar_datepicker_start_time" />
+                                <input class="form-control form-control-solid" name="initial_time" placeholder="Pick a start time" id="kt_calendar_datepicker_start_time" />
                                 <!--end::Input-->
                             </div>
                         </div>
@@ -93,20 +106,20 @@
                         <div class="col">
                             <div class="fv-row mb-9">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2 required">{{ __('Data final') }}</label>
+                                <label class="fs-6 fw-semibold mb-2 required">{{ __('Final date') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input class="form-control form-control-solid" name="calendar_event_end_date" placeholder="Pick a end date" id="kt_calendar_datepicker_end_date" />
+                                <input class="form-control form-control-solid" name="final_date" placeholder="Pick a end date" id="kt_calendar_datepicker_end_date" />
                                 <!--end::Input-->
                             </div>
                         </div>
                         <div class="col" data-kt-calendar="datepicker">
                             <div class="fv-row mb-9">
                                 <!--begin::Label-->
-                                <label class="fs-6 fw-semibold mb-2">{{ __('Hora final') }}</label>
+                                <label class="fs-6 fw-semibold mb-2 required">{{ __('Final time') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Input-->
-                                <input class="form-control form-control-solid" name="calendar_event_end_time" placeholder="Pick a end time" id="kt_calendar_datepicker_end_time" />
+                                <input class="form-control form-control-solid" name="final_time" placeholder="Pick a end time" id="kt_calendar_datepicker_end_time" />
                                 <!--end::Input-->
                             </div>
                         </div>

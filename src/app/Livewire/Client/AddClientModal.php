@@ -52,7 +52,6 @@ class AddClientModal extends Component
      */
     public function submit(): void
     {
-        dd($this->all());
         $request = $this->validate();
 
         try {

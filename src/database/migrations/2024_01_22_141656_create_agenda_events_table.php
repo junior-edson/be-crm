@@ -18,7 +18,11 @@ return new class extends Migration
                 ->references('id')
                 ->on('clients')
                 ->onDelete('set null');
-            $table->dateTime('event_datetime');
+            $table->string('name');
+            $table->date('initial_date');
+            $table->date('final_date')->nullable();
+            $table->time('initial_time')->nullable();
+            $table->time('final_time')->nullable();
             $table->string('address');
             $table->string('description');
             $table->timestamps();

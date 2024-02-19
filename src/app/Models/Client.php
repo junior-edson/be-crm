@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
 
@@ -39,5 +40,13 @@ class Client extends Model
             $model->id = Uuid::uuid4()->toString();
             $model->team_id = Auth::user()->currentTeam->id;
         });
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function agendaEvents(): HasMany
+    {
+        return $this->hasMany(AgendaEvent::class);
     }
 }

@@ -21,11 +21,24 @@ class CreateAgendaEventRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'client_id' => 'optional|exists:clients,id',
-            'event_datetime' => 'required|date',
-            'address' => 'required',
-            'description' => 'required',
+        $rules = [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'initial_date' => 'required|date_format:Y-m-d',
+            'final_date' => 'required|nullable|date_format:Y-m-d',
         ];
+
+        if ($this->has('client_id') && $this->filled('client_id')) {
+            $rules['client_id'] = 'exists:clients,id';
+        }
+
+        if ($this->has('initial_time') && $this->filled('initial_time')) {
+            $rules['final_time'] = 'required|after:initial_time|date_format:H:i';
+            $rules['initial_time'] = 'required|date_format:H:i';
+        }
+
+        return $rules;
     }
+
 }

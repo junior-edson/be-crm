@@ -18,7 +18,7 @@ Breadcrumbs::for('dashboard', function (BreadcrumbTrail $trail) {
 
 // Home > Dashboard > User Management
 Breadcrumbs::for('user-management.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('dashboard');
+    $trail->parent('home');
     $trail->push('User Management', route('user-management.users.index'));
 });
 
@@ -42,7 +42,7 @@ Breadcrumbs::for('user-management.permissions.index', function (BreadcrumbTrail 
 
 // Home > Dashboard > Client Management
 Breadcrumbs::for('client-management.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('dashboard');
+    $trail->parent('home');
     $trail->push('Client Management', route('client-management.clients.index'));
 });
 
@@ -50,4 +50,16 @@ Breadcrumbs::for('client-management.index', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('client-management.clients.index', function (BreadcrumbTrail $trail) {
     $trail->parent('client-management.index');
     $trail->push('Clients', route('client-management.clients.index'));
+});
+
+// Home > Quotations
+Breadcrumbs::for('quotation.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Quotations', route('quotation.quotation.index'));
+});
+
+// Home > Quotations > Create quotation
+Breadcrumbs::for('quotation.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('quotation.index');
+    $trail->push('Create quotation', route('quotation.quotation.create'));
 });

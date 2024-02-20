@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientManagementController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\AgendaEventController;
+use App\Http\Controllers\ProposalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,5 +40,9 @@ Route::middleware([
 
     Route::name('agenda.')->group(function() {
         Route::resource('/agenda/event', AgendaEventController::class);
+    });
+
+    Route::name('quotation.')->group(function() {
+        Route::resource('/quotation', ProposalController::class);
     });
 });

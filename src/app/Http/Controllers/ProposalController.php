@@ -8,23 +8,24 @@ use App\Services\Proposal\CreateProposalService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Exception;
+use Illuminate\View\View;
 
 class ProposalController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        //
+        return view('pages.apps.quotation.index');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('pages.apps.quotation.create');
     }
 
     /**

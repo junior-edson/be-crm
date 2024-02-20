@@ -45,7 +45,7 @@
                     <!--begin:Menu item-->
                     <div class="menu-item p-0 m-0">
                         <!--begin:Menu link-->
-                        <a href="{{ route('dashboard') }}" class="menu-link">
+                        <a href="{{ route('quotation.quotation.index') }}" class="menu-link">
                             <span class="menu-custom-icon d-flex flex-center flex-shrink-0 rounded w-40px h-40px me-3">{!! getIcon('tag', 'text-success fs-1') !!}</span>
                             <span class="d-flex flex-column">
 								<span class="fs-6 fw-bold text-gray-800">{{ __('Quotations') }}</span>

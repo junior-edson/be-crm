@@ -38,7 +38,7 @@
 			<label class="required fs-6 fw-semibold mb-2">Customer</label>
 			<!--end::Label-->
 			<!--begin::Input-->
-			<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="settings_customer">
+			<select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select..." name="settings_client">
 				<option></option>
 				<option value="1">Keenthemes</option>
 				<option value="2">CRM App</option>

@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientManagementController;
 use App\Http\Controllers\UserManagementController;
-use App\Http\Controllers\RoleManagementController;
 use App\Http\Controllers\PermissionManagementController;
+use App\Http\Controllers\AgendaEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,5 +35,9 @@ Route::middleware([
 
     Route::name('client-management.')->group(function () {
         Route::resource('/client-management/clients', ClientManagementController::class);
+    });
+
+    Route::name('agenda.')->group(function() {
+        Route::resource('/agenda/event', AgendaEventController::class);
     });
 });

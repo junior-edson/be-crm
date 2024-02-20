@@ -20,7 +20,10 @@ class CreateAgendaEventTest extends TestCase
 
         $payload = [
             'client_id' => $client->id,
-            'event_datetime' => Carbon::now()->addDays()->format('Y-m-d H:i'),
+            'name' => 'Test event',
+            'initial_date' => Carbon::now()->addDays()->format('Y-m-d'),
+            'initial_time' => Carbon::now()->addHour()->format('H:i'),
+            'final_time' => Carbon::now()->addHours(2)->format('H:i'),
             'address' => '123 Main St',
             'description' => 'Test description',
         ];
@@ -36,7 +39,10 @@ class CreateAgendaEventTest extends TestCase
     public function testCreateAgendaEventWithoutClient()
     {
         $payload = [
-            'event_datetime' => Carbon::now()->addDays()->format('Y-m-d H:i'),
+            'name' => 'Test event',
+            'initial_date' => Carbon::now()->addDays()->format('Y-m-d'),
+            'initial_time' => Carbon::now()->addHour()->format('H:i'),
+            'final_time' => Carbon::now()->addHours(2)->format('H:i'),
             'address' => '123 Main St',
             'description' => 'Test description',
         ];

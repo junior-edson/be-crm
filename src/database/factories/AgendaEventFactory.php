@@ -18,7 +18,11 @@ class AgendaEventFactory extends Factory
     {
         return [
             'client_id' => null,
-            'event_datetime' => now()->add(1, 'day'),
+            'name' => $this->faker->sentence(),
+            'initial_date' => now()->add(1, 'day')->format('Y-m-d'),
+            'final_date' => now()->add(2, 'day')->format('Y-m-d'),
+            'initial_time' => now()->add(1, 'hour')->format('H:i'),
+            'final_time' => now()->add(2, 'hour')->format('H:i'),
             'address' => $this->faker->address(),
             'description' => $this->faker->sentence(),
         ];

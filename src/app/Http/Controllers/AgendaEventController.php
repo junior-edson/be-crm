@@ -4,26 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Agenda\CreateAgendaEventRequest;
 use App\Http\Requests\Agenda\UpdateAgendaEventRequest;
+use App\Models\AgendaEvent;
 use App\Services\Agenda\CreateAgendaEventService;
+use App\Services\Agenda\DeleteAgendaEventService;
+use App\Services\Agenda\GetAgendaEventService;
 use App\Services\Agenda\UpdateAgendaEventService;
+use App\Services\Client\GetClientService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class AgendaEventController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(
+        GetClientService $getClientService,
+        GetAgendaEventService $getAgendaEventService
+    ): View
     {
-        //
-    }
+        addVendors(['fullcalendar']);
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return view('pages.apps.agenda.event.index')
+                ->with('clients', $getClientService->execute())
+                ->with('events', $getAgendaEventService->execute());
     }
 
     /**
@@ -34,28 +39,12 @@ class AgendaEventController extends Controller
         CreateAgendaEventService $service
     ): JsonResponse {
         try {
-            $service->execute($request);
+            $event = $service->execute($request);
 
-            return response()->json([], 204);
+            return response()->json(['event' => $event], 201);
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -65,19 +54,27 @@ class AgendaEventController extends Controller
     {
         try {
             $service = new UpdateAgendaEventService();
-            $service->execute($request, $id);
+            $data = $service->execute($request, $id);
 
-            return response()->json([], 204);
+            return response()->json($data, 201);
         } catch (\Throwable $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
+     * @param int $id
+     * @return JsonResponse
      */
-    public function destroy(string $id)
+    public function destroy(int $id): JsonResponse
     {
-        //
+        try {
+            $service = new DeleteAgendaEventService();
+            $service->execute($id);
+
+            return response()->json([], 204);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

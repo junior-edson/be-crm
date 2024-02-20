@@ -18,7 +18,9 @@ class UpdateAgendaEventTest extends TestCase
     {
         $agendaEvent = AgendaEvent::factory()->create();
         $payload = [
-            'event_datetime' => Carbon::now()->addDays(5),
+            'name' => 'Updated name',
+            'initial_date' => Carbon::now()->addDays(5)->format('Y-m-d'),
+            'initial_time' => Carbon::now()->addHours(2)->format('H:i'),
             'address' => 'Updated address',
             'description' => 'Updated description',
         ];

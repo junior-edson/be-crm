@@ -9,13 +9,15 @@ class CreateAgendaEventService
 {
     /**
      * @param CreateAgendaEventRequest $request
-     * @return void
+     * @return AgendaEvent
      */
-    public function execute(CreateAgendaEventRequest $request): void
+    public function execute(CreateAgendaEventRequest $request): AgendaEvent
     {
         $data = $request->all();
 
         $event = new AgendaEvent($data);
         $event->save();
+
+        return $event;
     }
 }

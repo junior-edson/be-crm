@@ -47,6 +47,7 @@
                     endDate: '',
                     allDay: false
                 };
+                let hasEventListener;
 
                 // Add event variables
                 let eventClient;
@@ -66,7 +67,8 @@
                 let form;
                 let validator;
                 let addButton;
-                let submitButton;
+                let submitAddButton;
+                let submitEditButton;
                 let cancelButton;
                 let closeButton;
 
@@ -181,20 +183,6 @@
                                         }
                                     }
                                 },
-                                'initial_time': {
-                                    validators: {
-                                        notEmpty: {
-                                            message: '{{ __('Initial time is required') }}'
-                                        }
-                                    }
-                                },
-                                'final_time': {
-                                    validators: {
-                                        notEmpty: {
-                                            message: '{{ __('Final time is required') }}'
-                                        }
-                                    }
-                                }
                             },
 
                             plugins: {
@@ -278,112 +266,113 @@
 
                     populateForm();
 
-                    // Handle submit form
-                    submitButton.addEventListener('click', function (e) {
-                        // Prevent default button action
-                        e.preventDefault();
+                    // Handle add submit form
+                    $(submitEditButton).prop('disabled', true).addClass('d-none');
+                    $(submitAddButton).prop('disabled', false).removeClass('d-none').on('click', triggerCreateNewEvent);
+                }
 
-                        // Validate form before submit
-                        if (validator) {
-                            validator.validate().then(function (status) {
-                                if (status === 'Valid') {
-                                    // Show loading indication
-                                    submitButton.setAttribute('data-kt-indicator', 'on');
+                const triggerCreateNewEvent = (allDayToggle) => {
+                    console.log('create event');
+                    // Validate form before submit
+                    if (validator) {
+                        validator.validate().then(function (status) {
+                            if (status === 'Valid') {
+                                // Show loading indication
+                                submitAddButton.setAttribute('data-kt-indicator', 'on');
 
-                                    // Disable submit button whilst loading
-                                    submitButton.disabled = true;
+                                // Disable submit button whilst loading
+                                submitAddButton.disabled = true;
 
-                                    setTimeout(function () {
-                                        submitButton.removeAttribute('data-kt-indicator');
-                                        let formData = new FormData(form);
+                                setTimeout(function () {
+                                    submitAddButton.removeAttribute('data-kt-indicator');
+                                    let formData = new FormData(form);
 
-                                        $.ajax({
-                                            url: form.action,
-                                            type: 'POST',
-                                            data: formData,
-                                            contentType: false,
-                                            processData: false,
-                                            success: function (response) {
-                                                let event = response.event;
+                                    $.ajax({
+                                        url: form.action,
+                                        type: 'POST',
+                                        data: formData,
+                                        contentType: false,
+                                        processData: false,
+                                        success: function (response) {
+                                            let event = response.event;
 
-                                                Swal.fire({
-                                                    text: "{{ __('New event added to calendar!') }}",
-                                                    icon: "success",
-                                                    buttonsStyling: false,
-                                                    confirmButtonText: "{{ __('Ok, got it!') }}",
-                                                    customClass: {
-                                                        confirmButton: "btn btn-primary"
+                                            Swal.fire({
+                                                text: "{{ __('New event added to calendar!') }}",
+                                                icon: "success",
+                                                buttonsStyling: false,
+                                                confirmButtonText: "{{ __('Ok, got it!') }}",
+                                                customClass: {
+                                                    confirmButton: "btn btn-primary"
+                                                }
+                                            }).then(function (result) {
+                                                if (result.isConfirmed) {
+                                                    modal.hide();
+
+                                                    // Detect if is all day event
+                                                    let allDayEvent = false;
+                                                    if (allDayToggle.checked) { allDayEvent = true; }
+                                                    if (startTimeFlatpickr.selectedDates.length === 0) { allDayEvent = true; }
+
+                                                    // Merge date & time
+                                                    let startDateTime = moment(startFlatpickr.selectedDates[0]).format();
+                                                    let endDateTime = moment(endFlatpickr.selectedDates[endFlatpickr.selectedDates.length - 1]).format();
+                                                    if (!allDayEvent) {
+                                                        const startDate = moment(startFlatpickr.selectedDates[0]).format('YYYY-MM-DD');
+                                                        const endDate = startDate;
+                                                        const startTime = moment(startTimeFlatpickr.selectedDates[0]).format('HH:mm:ss');
+                                                        const endTime = moment(endTimeFlatpickr.selectedDates[0]).format('HH:mm:ss');
+
+                                                        startDateTime = startDate + 'T' + startTime;
+                                                        endDateTime = endDate + 'T' + endTime;
                                                     }
-                                                }).then(function (result) {
-                                                    if (result.isConfirmed) {
-                                                        modal.hide();
 
-                                                        // Detect if is all day event
-                                                        let allDayEvent = false;
-                                                        if (allDayToggle.checked) { allDayEvent = true; }
-                                                        if (startTimeFlatpickr.selectedDates.length === 0) { allDayEvent = true; }
+                                                    // Add new event to calendar
+                                                    calendar.addEvent({
+                                                        id: event.id,
+                                                        title: eventName.value,
+                                                        description: eventDescription.value,
+                                                        location: eventLocation.value,
+                                                        start: startDateTime,
+                                                        end: endDateTime,
+                                                        allDay: allDayEvent
+                                                    });
+                                                    calendar.render();
 
-                                                        // Merge date & time
-                                                        let startDateTime = moment(startFlatpickr.selectedDates[0]).format();
-                                                        let endDateTime = moment(endFlatpickr.selectedDates[endFlatpickr.selectedDates.length - 1]).format();
-                                                        if (!allDayEvent) {
-                                                            const startDate = moment(startFlatpickr.selectedDates[0]).format('YYYY-MM-DD');
-                                                            const endDate = startDate;
-                                                            const startTime = moment(startTimeFlatpickr.selectedDates[0]).format('HH:mm:ss');
-                                                            const endTime = moment(endTimeFlatpickr.selectedDates[0]).format('HH:mm:ss');
+                                                    form.reset();
+                                                    $(eventClient).val(null).trigger('change');
 
-                                                            startDateTime = startDate + 'T' + startTime;
-                                                            endDateTime = endDate + 'T' + endTime;
-                                                        }
+                                                    submitAddButton.disabled = false;
+                                                }
+                                            });
+                                        },
+                                        error: function (xhr, status, error) {
+                                            Swal.fire({
+                                                text: xhr.responseJSON.message || "{{ __('Sorry, an error occurred.') }}",
+                                                icon: "error",
+                                                buttonsStyling: false,
+                                                confirmButtonText: "{{ __('Ok, got it!') }}",
+                                                customClass: {
+                                                    confirmButton: "btn btn-primary"
+                                                }
+                                            });
 
-                                                        // Add new event to calendar
-                                                        calendar.addEvent({
-                                                            id: event.id,
-                                                            title: eventName.value,
-                                                            description: eventDescription.value,
-                                                            location: eventLocation.value,
-                                                            start: startDateTime,
-                                                            end: endDateTime,
-                                                            allDay: allDayEvent
-                                                        });
-                                                        calendar.render();
-
-                                                        form.reset();
-                                                        $(eventClient).val(null).trigger('change');
-
-                                                        submitButton.disabled = false;
-                                                    }
-                                                });
-                                            },
-                                            error: function (xhr, status, error) {
-                                                Swal.fire({
-                                                    text: xhr.responseJSON.message || "{{ __('Sorry, an error occurred.') }}",
-                                                    icon: "error",
-                                                    buttonsStyling: false,
-                                                    confirmButtonText: "{{ __('Ok, got it!') }}",
-                                                    customClass: {
-                                                        confirmButton: "btn btn-primary"
-                                                    }
-                                                });
-
-                                                submitButton.disabled = false;
-                                            }
-                                        });
-                                    }, 500);
-                                } else {
-                                    Swal.fire({
-                                        text: "{{ __('Sorry, some required fields are missing.') }}",
-                                        icon: "error",
-                                        buttonsStyling: false,
-                                        confirmButtonText: "{{ __('Ok, got it!') }}",
-                                        customClass: {
-                                            confirmButton: "btn btn-primary"
+                                            submitAddButton.disabled = false;
                                         }
                                     });
-                                }
-                            });
-                        }
-                    });
+                                }, 500);
+                            } else {
+                                Swal.fire({
+                                    text: "{{ __('Sorry, some required fields are missing.') }}",
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary"
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
 
                 // Handle edit event
@@ -414,105 +403,107 @@
 
                     populateForm();
 
-                    submitButton.addEventListener('click', function (e) {
-                        // Prevent default button action
-                        e.preventDefault();
+                    // Handle submit form
+                    $(submitAddButton).prop('disabled', true).addClass('d-none');
+                    $(submitEditButton).prop('disabled', false).removeClass('d-none').on('click', triggerEditEvent);
+                }
 
-                        // Validate form before submit
-                        if (validator) {
-                            validator.validate().then(function (status) {
-                                if (status === 'Valid') {
-                                    // Show loading indication
-                                    submitButton.setAttribute('data-kt-indicator', 'on');
+                const triggerEditEvent = (allDayToggle) => {
+                    console.log('edit event');
+                    // Validate form before submit
+                    if (validator) {
+                        validator.validate().then(function (status) {
+                            if (status === 'Valid') {
+                                // Show loading indication
+                                submitAddButton.setAttribute('data-kt-indicator', 'on');
 
-                                    // Disable submit button whilst loading
-                                    submitButton.disabled = true;
+                                // Disable submit button whilst loading
+                                submitAddButton.disabled = true;
 
-                                    const eventId = data.id;
-                                    const formData = new FormData(form);
-                                    formData.append('_method', 'PUT');
+                                const eventId = data.id;
+                                const formData = new FormData(form);
+                                formData.append('_method', 'PUT');
 
-                                    $.ajax({
-                                        url: `/agenda/event/${eventId}`,
-                                        type: 'POST',
-                                        data: formData,
-                                        contentType: false,
-                                        processData: false,
-                                        success: function (response) {
-                                            // Detect if is all day event
-                                            let allDayEvent = false;
-                                            if (allDayToggle.checked) { allDayEvent = true; }
-                                            if (startTimeFlatpickr.selectedDates.length === 0) { allDayEvent = true; }
+                                $.ajax({
+                                    url: `/agenda/event/${eventId}`,
+                                    type: 'POST',
+                                    data: formData,
+                                    contentType: false,
+                                    processData: false,
+                                    success: function (response) {
+                                        // Detect if is all day event
+                                        let allDayEvent = false;
+                                        if (allDayToggle.checked) { allDayEvent = true; }
+                                        if (startTimeFlatpickr.selectedDates.length === 0) { allDayEvent = true; }
 
-                                            // Merge date & time
-                                            let startDateTime = moment(startFlatpickr.selectedDates[0]).format();
-                                            let endDateTime = moment(endFlatpickr.selectedDates[endFlatpickr.selectedDates.length - 1]).format();
-                                            if (!allDayEvent) {
-                                                const startDate = moment(startFlatpickr.selectedDates[0]).format('YYYY-MM-DD');
-                                                const endDate = startDate;
-                                                const startTime = moment(startTimeFlatpickr.selectedDates[0]).format('HH:mm:ss');
-                                                const endTime = moment(endTimeFlatpickr.selectedDates[0]).format('HH:mm:ss');
+                                        // Merge date & time
+                                        let startDateTime = moment(startFlatpickr.selectedDates[0]).format();
+                                        let endDateTime = moment(endFlatpickr.selectedDates[endFlatpickr.selectedDates.length - 1]).format();
+                                        if (!allDayEvent) {
+                                            const startDate = moment(startFlatpickr.selectedDates[0]).format('YYYY-MM-DD');
+                                            const endDate = startDate;
+                                            const startTime = moment(startTimeFlatpickr.selectedDates[0]).format('HH:mm:ss');
+                                            const endTime = moment(endTimeFlatpickr.selectedDates[0]).format('HH:mm:ss');
 
-                                                startDateTime = startDate + 'T' + startTime;
-                                                endDateTime = endDate + 'T' + endTime;
+                                            startDateTime = startDate + 'T' + startTime;
+                                            endDateTime = endDate + 'T' + endTime;
+                                        }
+
+                                        calendar.getEventById(eventId).remove();
+                                        calendar.addEvent({
+                                            id: eventId,
+                                            title: response.name,
+                                            description: response.description,
+                                            location: response.location,
+                                            start: startDateTime,
+                                            end: endDateTime,
+                                            allDay: allDayEvent
+                                        });
+                                        calendar.render();
+
+                                        modal.hide();
+                                        form.reset();
+                                        $(eventClient).val(null).trigger('change');
+
+                                        Swal.fire({
+                                            text: "{{ __('Event updated successfully!') }}",
+                                            icon: "success",
+                                            buttonsStyling: false,
+                                            confirmButtonText: "{{ __('Ok, got it!') }}",
+                                            customClass: {
+                                                confirmButton: "btn btn-primary"
                                             }
-
-                                            calendar.getEventById(eventId).remove();
-                                            calendar.addEvent({
-                                                id: eventId,
-                                                title: response.name,
-                                                description: response.description,
-                                                location: response.location,
-                                                start: startDateTime,
-                                                end: endDateTime,
-                                                allDay: allDayEvent
-                                            });
-                                            calendar.render();
-
-                                            modal.hide();
-                                            form.reset();
-                                            $(eventClient).val(null).trigger('change');
-
-                                            Swal.fire({
-                                                text: "{{ __('Event updated successfully!') }}",
-                                                icon: "success",
-                                                buttonsStyling: false,
-                                                confirmButtonText: "{{ __('Ok, got it!') }}",
-                                                customClass: {
-                                                    confirmButton: "btn btn-primary"
-                                                }
-                                            });
-                                        },
-                                        error: function (xhr, status, error) {
-                                            Swal.fire({
-                                                text: xhr.responseJSON.message,
-                                                icon: "error",
-                                                buttonsStyling: false,
-                                                confirmButtonText: "{{ __('Ok, got it!') }}",
-                                                customClass: {
-                                                    confirmButton: "btn btn-primary",
-                                                }
-                                            });
-                                        },
-                                        complete: function () {
-                                            submitButton.removeAttribute('data-kt-indicator');
-                                            submitButton.disabled = false;
-                                        }
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        text: "{{ __('Sorry, looks like there are some errors detected, please try again.') }}",
-                                        icon: "error",
-                                        buttonsStyling: false,
-                                        confirmButtonText: "{{ __('Ok, got it!') }}",
-                                        customClass: {
-                                            confirmButton: "btn btn-primary"
-                                        }
-                                    });
-                                }
-                            });
-                        }
-                    });
+                                        });
+                                    },
+                                    error: function (xhr, status, error) {
+                                        Swal.fire({
+                                            text: xhr.responseJSON.message,
+                                            icon: "error",
+                                            buttonsStyling: false,
+                                            confirmButtonText: "{{ __('Ok, got it!') }}",
+                                            customClass: {
+                                                confirmButton: "btn btn-primary",
+                                            }
+                                        });
+                                    },
+                                    complete: function () {
+                                        submitAddButton.removeAttribute('data-kt-indicator');
+                                        submitAddButton.disabled = false;
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    text: "{{ __('Sorry, looks like there are some errors detected, please try again.') }}",
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary"
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
 
                 // Handle view event
@@ -737,7 +728,8 @@
                         startTimepicker = form.querySelector('#kt_calendar_datepicker_start_time');
                         endTimepicker = form.querySelector('#kt_calendar_datepicker_end_time');
                         addButton = document.querySelector('[data-kt-calendar="add"]');
-                        submitButton = form.querySelector('#kt_modal_add_event_submit');
+                        submitAddButton = form.querySelector('#kt_modal_add_event_submit');
+                        submitEditButton = form.querySelector('#kt_modal_edit_event_submit');
                         cancelButton = form.querySelector('#kt_modal_add_event_cancel');
                         closeButton = element.querySelector('#kt_modal_add_event_close');
                         modalTitle = form.querySelector('[data-kt-calendar="title"]');

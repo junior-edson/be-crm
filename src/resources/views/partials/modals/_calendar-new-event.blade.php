@@ -71,7 +71,7 @@
                     <div class="fv-row mb-9">
                         <!--begin::Checkbox-->
                         <label class="form-check form-check-custom form-check-solid">
-                            <input class="form-check-input" type="checkbox" value="" id="kt_calendar_datepicker_allday" />
+                            <input class="form-check-input" type="checkbox" value="1" id="kt_calendar_datepicker_allday" name="allday" />
                             <span class="form-check-label fw-semibold" for="kt_calendar_datepicker_allday">{{ __('All day') }}</span>
                         </label>
                         <!--end::Checkbox-->
@@ -133,7 +133,16 @@
                     <button type="reset" id="kt_modal_add_event_cancel" class="btn btn-light me-3">{{ __('Cancel') }}</button>
                     <!--end::Button-->
                     <!--begin::Button-->
-                    <button type="button" id="kt_modal_add_event_submit" class="btn btn-primary">
+                    <button type="button" id="kt_modal_add_event_submit" class="btn btn-primary d-none" disabled>
+                        <span class="indicator-label">{{ __('Submit') }}</span>
+                        <span class="indicator-progress">
+                            {{ __('Please wait...') }}
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                    <!--end::Button-->
+                    <!--begin::Button-->
+                    <button type="button" id="kt_modal_edit_event_submit" class="btn btn-primary d-none" disabled>
                         <span class="indicator-label">{{ __('Submit') }}</span>
                         <span class="indicator-progress">
                             {{ __('Please wait...') }}

@@ -33,9 +33,12 @@ class CreateAgendaEventRequest extends FormRequest
             $rules['client_id'] = 'exists:clients,id';
         }
 
-        if ($this->has('initial_time') && $this->filled('initial_time')) {
-            $rules['final_time'] = 'required|after:initial_time|date_format:H:i';
+        if ($this->input('allday') === null) {
             $rules['initial_time'] = 'required|date_format:H:i';
+            $rules['final_time'] = 'required|after:initial_time|date_format:H:i';
+        } else {
+            $rules['initial_time'] = 'nullable|date_format:H:i';
+            $rules['final_time'] = 'nullable|after:initial_time|date_format:H:i';
         }
 
         return $rules;

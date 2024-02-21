@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Proposal\CreateProposalRequest;
+use App\Services\Client\GetClientService;
 use App\Services\Proposal\CreateProposalItemService;
 use App\Services\Proposal\CreateProposalService;
 use Illuminate\Http\JsonResponse;
@@ -23,9 +24,10 @@ class ProposalController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(GetClientService $getClientService): View
     {
-        return view('pages.apps.quotation.create');
+        return view('pages.apps.quotation.create')
+            ->with('clients', $getClientService->execute());
     }
 
     /**

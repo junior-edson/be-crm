@@ -20,7 +20,7 @@
                         <!--begin::Card body-->
                         <div class="card-body p-12">
                             <!--begin::Form-->
-                            <form action="" id="kt_invoice_form">
+                            <form action="" id="kt_quotation_form">
                                 <!--begin::Wrapper-->
                                 <div class="d-flex flex-column align-items-start flex-xxl-row">
                                     <!--begin::Input group-->
@@ -31,7 +31,7 @@
                                         <!--begin::Input-->
                                         <div class="position-relative d-flex align-items-center w-150px">
                                             <!--begin::Datepicker-->
-                                            <input class="form-control form-control-transparent fw-bold pe-5" placeholder="{{ __('Select date') }}" name="invoice_date" />
+                                            <input class="form-control form-control-transparent fw-bold pe-5" placeholder="{{ __('Select date') }}" name="quotation_date" />
                                             <!--end::Datepicker-->
                                             <!--begin::Icon-->
                                             <i class="ki-duotone ki-down fs-4 position-absolute ms-4 end-0"></i>
@@ -53,7 +53,7 @@
                                         <!--begin::Input-->
                                         <div class="position-relative d-flex align-items-center w-150px">
                                             <!--begin::Datepicker-->
-                                            <input class="form-control form-control-transparent fw-bold pe-5" placeholder="{{ __('Select date') }}" name="invoice_due_date" />
+                                            <input class="form-control form-control-transparent fw-bold pe-5" placeholder="{{ __('Select date') }}" name="quotation_due_date" />
                                             <!--end::Datepicker-->
                                             <!--begin::Icon-->
                                             <i class="ki-duotone ki-down fs-4 position-absolute end-0 ms-4"></i>
@@ -76,17 +76,26 @@
                                             <label class="form-label fs-6 fw-bold text-gray-700 mb-3">{{ __('Client') }}</label>
                                             <!--begin::Input group-->
                                             <div class="mb-5">
-                                                <input type="text" class="form-control form-control-solid" placeholder="{{ __('Name') }}" />
+                                                <!--begin::Select-->
+                                                <select name="client_id" aria-label="{{ __('Select client') }}" data-control="select2" data-placeholder="{{ __('Select client') }}" class="form-select form-select-solid">
+                                                    <option value=""></option>
+                                                    @foreach($clients as $client)
+                                                    <option data-tax-type="{{ __(getTaxName($client)) }}" data-tax-percentage="{{ getTaxPercentage($client) }}" data-email="{{ $client->email }}" data-address="{{ $client->address }}" value="{{ $client->id }}">
+                                                        {{ $client->name }} {{ $client->type !== 'INDIVIDUAL' ? "(" . __('Reg.no.') . ":" . $client->registration_code . ")" : '' }}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                <!--end::Select-->
                                             </div>
                                             <!--end::Input group-->
                                             <!--begin::Input group-->
                                             <div class="mb-5">
-                                                <input type="text" class="form-control form-control-solid" placeholder="{{ __('Email') }}" />
+                                                <input type="text" name="client_email" class="form-control form-control-solid" placeholder="{{ __('Email') }}" />
                                             </div>
                                             <!--end::Input group-->
                                             <!--begin::Input group-->
                                             <div class="mb-5">
-                                                <textarea class="form-control form-control-solid" rows="3" placeholder="{{ __('Address') }}"></textarea>
+                                                <textarea name="client_address" class="form-control form-control-solid" rows="3" placeholder="{{ __('Address') }}"></textarea>
                                             </div>
                                             <!--end::Input group-->
                                         </div>
@@ -96,17 +105,17 @@
                                             <label class="form-label fs-6 fw-bold text-gray-700 mb-3">{{ __('Company') }}</label>
                                             <!--begin::Input group-->
                                             <div class="mb-5">
-                                                <input type="text" class="form-control form-control-solid" placeholder="{{ __('Name') }}" />
+                                                <input type="text" class="form-control form-control-solid" placeholder="{{ __('Name') }}" value="{{ \Illuminate\Support\Facades\Auth::user()->currentTeam->name }}" readonly />
                                             </div>
                                             <!--end::Input group-->
                                             <!--begin::Input group-->
                                             <div class="mb-5">
-                                                <input type="text" class="form-control form-control-solid" placeholder="{{ __('Email') }}" />
+                                                <input type="text" class="form-control form-control-solid" placeholder="{{ __('Email') }}" value="{{ \Illuminate\Support\Facades\Auth::user()->currentTeam->email }}" readonly />
                                             </div>
                                             <!--end::Input group-->
                                             <!--begin::Input group-->
                                             <div class="mb-5">
-                                                <textarea class="form-control form-control-solid" rows="3" placeholder="{{ __('Address') }}"></textarea>
+                                                <textarea class="form-control form-control-solid" rows="3" placeholder="{{ __('Address') }}" readonly>{{ \Illuminate\Support\Facades\Auth::user()->currentTeam->address }}</textarea>
                                             </div>
                                             <!--end::Input group-->
                                         </div>
@@ -132,7 +141,6 @@
                                             <tbody>
                                             <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
                                                 <td class="pe-7">
-                                                    <input type="text" class="form-control form-control-solid mb-2" name="name[]" placeholder="Item name" />
                                                     <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />
                                                 </td>
                                                 <td class="ps-0">
@@ -144,7 +152,7 @@
                                                 <td class="pt-8 text-end text-nowrap">
                                                     <span data-kt-element="total">0,00</span></td>
                                                 <td class="pt-5 text-end">
-                                                    <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
+                                                    <button type="button" class="btn btn-sm btn-icon btn-icon-danger" data-kt-element="remove-item">
                                                         <i class="ki-duotone ki-trash fs-3">
                                                             <span class="path1"></span>
                                                             <span class="path2"></span>
@@ -161,23 +169,28 @@
                                             <tfoot>
                                             <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
                                                 <th class="text-primary">
-                                                    <button class="btn btn-link py-1" data-kt-element="add-item">Add item</button>
+                                                    <button class="btn btn-sm btn-primary" data-kt-element="add-item">Add item</button>
                                                 </th>
                                                 <th colspan="2" class="border-bottom border-bottom-dashed ps-0">
                                                     <div class="d-flex flex-column align-items-start">
                                                         <div class="fs-5">Subtotal</div>
-                                                        <button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Coming soon">Add tax</button>
-                                                        <button class="btn btn-link py-1" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Coming soon">Add discount</button>
+                                                        <div class="fs-5 tax_label">VAT</div>
+                                                        <input type="hidden" class="tax_percentage" name="tax_percentage" value="0" />
                                                     </div>
                                                 </th>
                                                 <th colspan="2" class="border-bottom border-bottom-dashed text-end">
-                                                    <span data-kt-element="sub-total">0,00</span></th>
+                                                    <div class="d-flex flex-column align-items-end">
+                                                        <span data-kt-element="sub-total">0,00</span>
+                                                        <span data-kt-element="display-tax">0,00</span>
+                                                    </div>
+                                                </th>
                                             </tr>
                                             <tr class="align-top fw-bold text-gray-700">
                                                 <th></th>
                                                 <th colspan="2" class="fs-4 ps-0">Total</th>
                                                 <th colspan="2" class="text-end fs-4 text-nowrap">
-                                                    <span data-kt-element="grand-total">0,00</span></th>
+                                                    <span data-kt-element="grand-total">0,00</span>
+                                                </th>
                                             </tr>
                                             </tfoot>
                                             <!--end::Table foot-->
@@ -188,7 +201,6 @@
                                     <table class="table d-none" data-kt-element="item-template">
                                         <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
                                             <td class="pe-7">
-                                                <input type="text" class="form-control form-control-solid mb-2" name="name[]" placeholder="Item name" />
                                                 <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />
                                             </td>
                                             <td class="ps-0">
@@ -200,7 +212,7 @@
                                             <td class="pt-8 text-end">
                                                 <span data-kt-element="total">0,00</span></td>
                                             <td class="pt-5 text-end">
-                                                <button type="button" class="btn btn-sm btn-icon btn-active-color-primary" data-kt-element="remove-item">
+                                                <button type="button" class="btn btn-sm btn-icon btn-color-danger" data-kt-element="remove-item">
                                                     <i class="ki-duotone ki-trash fs-3">
                                                         <span class="path1"></span>
                                                         <span class="path2"></span>
@@ -237,7 +249,7 @@
                 <!--begin::Sidebar-->
                 <div class="flex-lg-auto min-w-lg-300px">
                     <!--begin::Card-->
-                    <div class="card" data-kt-sticky="true" data-kt-sticky-name="invoice" data-kt-sticky-offset="{default: false, lg: '200px'}" data-kt-sticky-width="{lg: '250px', lg: '300px'}" data-kt-sticky-left="auto" data-kt-sticky-top="150px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
+                    <div class="card" data-kt-sticky="true" data-kt-sticky-name="quotation" data-kt-sticky-offset="{default: false, lg: '200px'}" data-kt-sticky-width="{lg: '250px', lg: '300px'}" data-kt-sticky-left="auto" data-kt-sticky-top="150px" data-kt-sticky-animation="false" data-kt-sticky-zindex="95">
                         <!--begin::Card body-->
                         <div class="card-body p-10">
                             <!--begin::Input group-->
@@ -299,12 +311,12 @@
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Row-->
-                                <button type="submit" href="#" class="btn btn-primary w-100" id="kt_invoice_submit_button">
+                                <button type="submit" href="#" class="btn btn-primary w-100" id="kt_quotation_submit_button">
                                     <i class="ki-duotone ki-triangle fs-3">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>
-                                    </i>Send Invoice</button>
+                                    </i>Send quotation</button>
                             </div>
                             <!--end::Actions-->
                         </div>
@@ -323,13 +335,15 @@
     @push('scripts')
         <script>
             // Class definition
-            let KTAppInvoicesCreate = function () {
+            let KTAppQuotationsCreate = function () {
                 let form;
 
                 // Private functions
                 let updateTotal = function() {
                     let items = [].slice.call(form.querySelectorAll('[data-kt-element="items"] [data-kt-element="item"]'));
+                    let subTotal = 0;
                     let grandTotal = 0;
+                    let taxValue = 0;
                     let format = wNumb({
                         prefix: '€ ',
                         decimals: 2,
@@ -340,7 +354,7 @@
                     items.map(function (item) {
                         let quantity = item.querySelector('[data-kt-element="quantity"]');
                         let price = item.querySelector('[data-kt-element="price"]');
-
+                        let tax_percentage = $('.tax_percentage');
                         let priceValue = format.from(price.value);
                         priceValue = (!priceValue || priceValue < 0) ? 0 : priceValue;
 
@@ -352,10 +366,13 @@
 
                         item.querySelector('[data-kt-element="total"]').innerText = format.to(priceValue * quantityValue);
 
-                        grandTotal += priceValue * quantityValue;
+                        subTotal += priceValue * quantityValue;
+                        taxValue = subTotal * tax_percentage.val() / 100;
+                        grandTotal = subTotal + taxValue;
                     });
 
-                    form.querySelector('[data-kt-element="sub-total"]').innerText = format.to(grandTotal);
+                    form.querySelector('[data-kt-element="display-tax"]').innerText = format.to(taxValue);
+                    form.querySelector('[data-kt-element="sub-total"]').innerText = format.to(subTotal);
                     form.querySelector('[data-kt-element="grand-total"]').innerText = format.to(grandTotal);
                 }
 
@@ -400,14 +417,14 @@
 
                 let initForm = function(element) {
                     // Due date. For more info, please visit the official plugin site: https://flatpickr.js.org/
-                    let invoiceDate = $(form.querySelector('[name="invoice_date"]'));
-                    invoiceDate.flatpickr({
+                    let quotationDate = $(form.querySelector('[name="quotation_date"]'));
+                    quotationDate.flatpickr({
                         enableTime: false,
                         dateFormat: "d, M Y",
                     });
 
                     // Due date. For more info, please visit the official plugin site: https://flatpickr.js.org/
-                    let dueDate = $(form.querySelector('[name="invoice_due_date"]'));
+                    let dueDate = $(form.querySelector('[name="quotation_due_date"]'));
                     dueDate.flatpickr({
                         enableTime: false,
                         dateFormat: "d, M Y",
@@ -417,18 +434,38 @@
                 // Public methods
                 return {
                     init: function(element) {
-                        form = document.querySelector('#kt_invoice_form');
+                        form = document.querySelector('#kt_quotation_form');
 
                         handeForm();
                         initForm();
                         updateTotal();
-                    }
+                    },
+                    updateTotal: updateTotal,
                 };
             }();
 
             // On document ready
             KTUtil.onDOMContentLoaded(function () {
-                KTAppInvoicesCreate.init();
+                KTAppQuotationsCreate.init();
+
+                $('[name="client_id"]').on('change', function (e) {
+                    let selectedOption = $(this).select2('data')[0];
+
+                    if (selectedOption) {
+                        let taxType = selectedOption.element.dataset.taxType;
+                        let taxPercentage = selectedOption.element.dataset.taxPercentage;
+                        let email = selectedOption.element.dataset.email;
+                        let address = selectedOption.element.dataset.address;
+
+                        $('.tax_label').text(taxType);
+                        $('.tax_percentage').val(taxPercentage);
+                        $('[name="client_email"]').val(email);
+                        $('[name="client_address"]').val(address);
+
+                        KTAppQuotationsCreate.updateTotal();
+                    }
+                });
+
             });
         </script>
     @endpush

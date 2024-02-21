@@ -431,3 +431,45 @@ if (!function_exists('getIcon')) {
         return theme()->getIcon($name, $class, $type, $tag);
     }
 }
+
+
+if (!function_exists('getTaxName')) {
+    function getTaxName($client)
+    {
+        // Rule do update tax from 21% to 6%
+        if (
+            $client->tax_type === \App\Enums\EnumClientTaxType::TAX_21_PERCENT->personTaxes()
+            && $client->is_building_older_than_10_years === 1
+        ) {
+            return \App\Enums\EnumClientTaxType::TAX_6_PERCENT->personTaxes();
+        }
+
+        // Autoliquidation, subcontractor, NPO, etc.
+        return $client->tax_type;
+    }
+}
+
+
+if (!function_exists('getTaxPercentage')) {
+    function getTaxPercentage($client)
+    {
+        // Tax 21%
+        if (
+            $client->tax_type === \App\Enums\EnumClientTaxType::TAX_21_PERCENT->personTaxes()
+            && $client->is_building_older_than_10_years === 0
+        ) {
+            return 21;
+        }
+
+        // Tax 6%
+        if (
+            $client->tax_type === \App\Enums\EnumClientTaxType::TAX_21_PERCENT->personTaxes()
+            && $client->is_building_older_than_10_years === 1
+        ) {
+            return 6;
+        }
+
+        // Autoliquidation, subcontractor, NPO, etc.
+        return 0;
+    }
+}

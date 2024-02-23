@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Proposal;
 
-use App\Http\Requests\Proposal\UpdateProposalRequest;
-use App\Models\Proposal;
+use App\Http\Requests\Proposal\UpdateQuotationRequest;
+use App\Models\Quotation;
 use App\Models\Team;
 use App\Models\User;
-use App\Services\Proposal\UpdateProposalService;
+use App\Services\Quotation\UpdateQuotationService;
 use Carbon\Carbon;
 use Tests\TestCase;
 
@@ -17,7 +17,7 @@ class UpdateProposalTest extends TestCase
         $team = Team::factory()->create();
         $this->actingAs(User::factory()->create(['current_team_id' => $team->id]));
 
-        $proposal = Proposal::factory()->create(['team_id' => $team->id]);
+        $proposal = Quotation::factory()->create(['team_id' => $team->id]);
 
         $payload = [
             'valid_until' => Carbon::now()->addDays(25)->format('Y-m-d'),
@@ -36,9 +36,9 @@ class UpdateProposalTest extends TestCase
                 ],
             ],
         ];
-        $request = new UpdateProposalRequest($payload);
+        $request = new UpdateQuotationRequest($payload);
 
-        $service = new UpdateProposalService();
+        $service = new UpdateQuotationService();
         $updatedProposal = $service->execute($request, $proposal->id);
 
         $this->assertDatabaseCount('proposals', 1);

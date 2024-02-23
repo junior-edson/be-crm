@@ -3,11 +3,11 @@
 namespace Tests\Unit\Proposal;
 
 use App\Enums\EnumClientTaxType;
-use App\Http\Requests\Proposal\CreateProposalRequest;
+use App\Http\Requests\Proposal\CreateQuotationRequest;
 use App\Models\Client;
 use App\Models\Team;
 use App\Models\User;
-use App\Services\Proposal\CreateProposalService;
+use App\Services\Quotation\CreateQuotationService;
 use Carbon\Carbon;
 use Tests\TestCase;
 use Exception;
@@ -42,9 +42,9 @@ class CreateProposalTest extends TestCase
                 ],
             ],
         ];
-        $request = new CreateProposalRequest($payload);
+        $request = new CreateQuotationRequest($payload);
 
-        $service = new CreateProposalService();
+        $service = new CreateQuotationService();
         $createdProposal = $service->execute($request);
 
         $this->assertDatabaseCount('proposals', 1);

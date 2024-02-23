@@ -5,7 +5,7 @@ use App\Http\Controllers\ClientManagementController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\PermissionManagementController;
 use App\Http\Controllers\AgendaEventController;
-use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\QuotationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +43,6 @@ Route::middleware([
     });
 
     Route::name('quotation.')->group(function() {
-        Route::resource('/quotation', ProposalController::class);
+        Route::resource('/quotation', QuotationController::class);
     });
 });

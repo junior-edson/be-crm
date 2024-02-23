@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Proposal\CreateProposalRequest;
+use App\Http\Requests\Proposal\CreateQuotationRequest;
 use App\Services\Client\GetClientService;
-use App\Services\Proposal\CreateProposalItemService;
-use App\Services\Proposal\CreateProposalService;
+use App\Services\Quotation\CreateProposalItemService;
+use App\Services\Quotation\CreateQuotationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\View\View;
 
-class ProposalController extends Controller
+class QuotationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,8 +34,8 @@ class ProposalController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(
-        CreateProposalRequest $request,
-        CreateProposalService $proposalService
+        CreateQuotationRequest $request,
+        CreateQuotationService $proposalService
     ): JsonResponse {
         try {
             $proposal = $proposalService->execute($request);

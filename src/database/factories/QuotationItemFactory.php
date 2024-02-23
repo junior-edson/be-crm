@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Proposal;
+use App\Models\Quotation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProposalItem>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\QuotationItem>
  */
-class ProposalItemFactory extends Factory
+class QuotationItemFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,10 +18,10 @@ class ProposalItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'proposal_id' => Proposal::factory()->create(),
+            'quotation_id' => Quotation::factory()->create(),
             'description' => $this->faker->sentence(),
-            'unit_type' => 'm²',
             'quantity' => $this->faker->numberBetween(1, 10),
+            'unit_type' => 'm²',
             'unit_price' => $this->faker->numberBetween(100, 1000),
         ];
     }

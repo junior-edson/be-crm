@@ -369,7 +369,7 @@
                                         <span class="path2"></span>
                                         <span class="path3"></span>
                                     </i>
-                                    Send quotation
+                                    Create quotation
                                 </button>
                             </div>
                             <!--end::Actions-->

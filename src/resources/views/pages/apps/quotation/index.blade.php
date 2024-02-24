@@ -97,7 +97,8 @@
                                     <div class="position-relative ps-6 pe-3 py-2">
                                         <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-{{ getQuotationColor($quotation->status) }}"></div>
                                         <a class="mb-1 text-gray-900 text-hover-primary fw-bold">Draft for {{ $quotation->client_name }}</a>
-                                        <div class="fs-7 text-muted fw-bold">Created at {{ $quotation->created_at->format('d M, Y H:i') }}</div>
+                                        <div class="fs-7 text-muted fw-bold">Created by {{ $quotation->user->name }}</div>
+                                        <div class="fs-7 text-muted fw-bold">Created at {{ $quotation->created_at->format('d/m/Y H:i') }}</div>
                                     </div>
                                 </td>
                                 <td>
@@ -109,8 +110,8 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="fs-6 fw-bold text-muted">Issue: <span class="text-gray-800">{{ $quotation->issue_date ? $quotation->issue_date->format('d M, Y') : '-' }}</span></div>
-                                    <div class="fs-6 fw-bold text-muted">Due: <span class="text-gray-800">{{ $quotation->due_date ? $quotation->due_date->format('d M, Y') : '-' }}</span></div>
+                                    <div class="fs-6 fw-bold text-muted">Issue: <span class="text-gray-800">{{ $quotation->issue_date ? $quotation->issue_date->format('d/m/Y') : '-' }}</span></div>
+                                    <div class="fs-6 fw-bold text-muted">Due: <span class="text-gray-800">{{ $quotation->due_date ? $quotation->due_date->format('d/m/Y') : '-' }}</span></div>
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center">

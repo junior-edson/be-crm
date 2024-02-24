@@ -17,13 +17,13 @@ class GetQuotationService
             return Quotation::where('status', $status)
                 ->where('team_id', auth()->user()->currentTeam->id)
                 ->orderByDesc('created_at')
-                ->with('items')
+                ->with(['items', 'user'])
                 ->get();
         }
 
         return Quotation::orderByDesc('created_at')
             ->where('team_id', auth()->user()->currentTeam->id)
-            ->with('items')
+            ->with(['items', 'user'])
             ->get();
     }
 

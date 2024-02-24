@@ -35,7 +35,6 @@ class CreateQuotationRequest extends FormRequest
             'currency' => 'required|string',
             'notes' => 'string',
             'status' => 'string',
-            'items' => 'array',
         ];
     }
 }

@@ -15,7 +15,7 @@ class CreateQuotationService
      */
     public function execute(CreateQuotationRequest $request): Quotation
     {
-        $data = $request->validated();
+        $data = $request->all();
 
         $quotation = new Quotation($data);
         $savedQuotation = $quotation->save();
@@ -29,7 +29,7 @@ class CreateQuotationService
             $itemsData[] = [
                 'description' => $description,
                 'quantity' => $data['quantity'][$key],
-                'price' => $data['price'][$key],
+                'unit_price' => $data['unit_price'][$key],
             ];
         }
 

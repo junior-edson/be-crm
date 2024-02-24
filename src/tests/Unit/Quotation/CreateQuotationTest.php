@@ -21,53 +21,57 @@ class CreateQuotationTest extends TestCase
     {
         $team = Team::factory()->create();
         $this->actingAs(User::factory()->create(['current_team_id' => $team->id]));
+        $client = Client::factory()->create();
 
         $payload = [
-            'team_id' => $team->id,
-            'client_id' => Client::factory()->create()->id,
+            'client_id' => $client->id,
+            'issue_date' => Carbon::now()->format('Y-m-d'),
             'due_date' => Carbon::now()->addDays(15)->format('Y-m-d'),
-            'tax_type' => EnumClientTaxType::TAX_21_PERCENT->personTaxes(),
-            'items' => [
-                [
-                    'description' => 'Item 1',
-                    'unit_type' => 'm²',
-                    'quantity' => 1,
-                    'unit_price' => 100,
-                ],
-                [
-                    'description' => 'Item 2',
-                    'unit_type' => 'm²',
-                    'quantity' => 2,
-                    'unit_price' => 200,
-                ],
+            'client_name' => $client->name,
+            'client_email' => $client->email,
+            'client_address' => $client->address,
+            'company_name' => $team->name,
+            'company_email' => $team->email,
+            'company_address' => $team->address,
+            'tax_type' => $client->tax_type,
+            'currency' => 'EUR',
+            'description' => [
+                'Item 1',
+                'Item 2',
+            ],
+            'quantity' => [
+                1,
+                2,
+            ],
+            'unit_price' => [
+                100,
+                200,
             ],
         ];
         $request = new CreateQuotationRequest($payload);
 
         $service = new CreateQuotationService();
-        $createdProposal = $service->execute($request);
+        $createdQuotation = $service->execute($request);
 
-        $this->assertDatabaseCount('proposals', 1);
-        $this->assertDatabaseHas('proposals', [
+        $this->assertDatabaseCount('quotations', 1);
+        $this->assertDatabaseHas('quotations', [
             'team_id' => $team->id,
             'client_id' => $payload['client_id'],
             'due_date' => $payload['due_date'],
         ]);
 
-        $this->assertDatabaseCount('proposal_items', 2);
-        $this->assertDatabaseHas('proposal_items', [
-            'proposal_id' => $createdProposal->id,
-            'description' => $payload['items'][0]['description'],
-            'unit_type' => $payload['items'][0]['unit_type'],
-            'quantity' => $payload['items'][0]['quantity'],
-            'unit_price' => $payload['items'][0]['unit_price'],
+        $this->assertDatabaseCount('quotation_items', 2);
+        $this->assertDatabaseHas('quotation_items', [
+            'quotation_id' => $createdQuotation->id,
+            'description' => $payload['description'][0],
+            'quantity' => $payload['quantity'][0],
+            'unit_price' => $payload['unit_price'][0],
         ]);
-        $this->assertDatabaseHas('proposal_items', [
-            'proposal_id' => $createdProposal->id,
-            'description' => $payload['items'][1]['description'],
-            'unit_type' => $payload['items'][1]['unit_type'],
-            'quantity' => $payload['items'][1]['quantity'],
-            'unit_price' => $payload['items'][1]['unit_price'],
+        $this->assertDatabaseHas('quotation_items', [
+            'quotation_id' => $createdQuotation->id,
+            'description' => $payload['description'][1],
+            'quantity' => $payload['quantity'][1],
+            'unit_price' => $payload['unit_price'][1],
         ]);
     }
 }

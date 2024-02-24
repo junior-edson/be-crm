@@ -6,7 +6,6 @@ use App\Http\Requests\Quotation\CreateDraftQuotationRequest;
 use App\Http\Requests\Quotation\CreateQuotationRequest;
 use App\Services\Client\GetClientService;
 use App\Services\Quotation\CreateDraftQuotationService;
-use App\Services\Quotation\CreateProposalItemService;
 use App\Services\Quotation\CreateQuotationService;
 use App\Services\Quotation\GetQuotationService;
 use Illuminate\Http\JsonResponse;

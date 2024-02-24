@@ -69,3 +69,9 @@ Breadcrumbs::for('quotation.show', function (BreadcrumbTrail $trail, $quotationI
     $trail->parent('quotation.index');
     $trail->push('View quotation', route('quotation.quotation.show', $quotationId));
 });
+
+// Home > Quotations > Edit quotation
+Breadcrumbs::for('quotation.edit', function (BreadcrumbTrail $trail, $quotationId) {
+    $trail->parent('quotation.index');
+    $trail->push('Edit quotation', route('quotation.quotation.edit', $quotationId));
+});

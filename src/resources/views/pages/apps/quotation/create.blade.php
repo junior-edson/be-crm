@@ -1,10 +1,18 @@
 <x-default-layout>
     @section('title')
-        {{ __('Create quotation') }}
+        @if (!isset($quotation))
+            {{ __('Create quotation') }}
+        @else
+            {{ __('Edit quotation') }}
+        @endif
     @endsection
 
     @section('breadcrumbs')
-        {{ Breadcrumbs::render('quotation.create') }}
+        @if (!isset($quotation))
+            {{ Breadcrumbs::render('quotation.create') }}
+        @else
+            {{ Breadcrumbs::render('quotation.edit', $quotation->id) }}
+        @endif
     @endsection
 
     <!--begin::Content-->
@@ -32,7 +40,7 @@
                                         <!--begin::Input-->
                                         <div class="position-relative d-flex align-items-center w-150px">
                                             <!--begin::Datepicker-->
-                                            <input class="form-control form-control-transparent fw-bold pe-5" placeholder="{{ __('Select date') }}" name="issue_date" />
+                                            <input class="form-control form-control-transparent fw-bold pe-5" placeholder="{{ __('Select date') }}" name="issue_date" value="{{ isset($quotation->issue_date) ? $quotation->issue_date->format('d/m/Y') : null }}" />
                                             <!--end::Datepicker-->
                                             <!--begin::Icon-->
                                             <i class="ki-duotone ki-down fs-4 position-absolute ms-4 end-0"></i>
@@ -54,7 +62,7 @@
                                         <!--begin::Input-->
                                         <div class="position-relative d-flex align-items-center w-150px">
                                             <!--begin::Datepicker-->
-                                            <input class="form-control form-control-transparent fw-bold pe-5" placeholder="{{ __('Select date') }}" name="due_date" />
+                                            <input class="form-control form-control-transparent fw-bold pe-5" placeholder="{{ __('Select date') }}" name="due_date" value="{{ isset($quotation->due_date) ? $quotation->due_date->format('d/m/Y') : null }}" />
                                             <!--end::Datepicker-->
                                             <!--begin::Icon-->
                                             <i class="ki-duotone ki-down fs-4 position-absolute end-0 ms-4"></i>
@@ -78,7 +86,7 @@
                                             <!--begin::Input group-->
                                             <div class="mb-5">
                                                 <!--begin::Select-->
-                                                <input type="hidden" id="quotation_id" name="quotation_id" />
+                                                <input type="hidden" id="quotation_id" name="quotation_id" value="{{ isset($quotation) ? $quotation->id : null }}" />
                                                 <select name="client_id" aria-label="{{ __('Select client') }}" data-control="select2" data-placeholder="{{ __('Select client') }}" class="form-select form-select-solid">
                                                     <option value=""></option>
                                                     @foreach($clients as $client)
@@ -92,13 +100,13 @@
                                             <!--end::Input group-->
                                             <!--begin::Input group-->
                                             <div class="mb-5">
-                                                <input type="hidden" name="client_name" />
-                                                <input type="text" name="client_email" class="form-control form-control-solid" placeholder="{{ __('Email') }}" />
+                                                <input type="hidden" name="client_name" value="{{ isset($quotation) ? $quotation->client_name : null }}" />
+                                                <input type="text" name="client_email" class="form-control form-control-solid" placeholder="{{ __('Email') }}" value="{{ isset($quotation) ? $quotation->client_email : null }}" />
                                             </div>
                                             <!--end::Input group-->
                                             <!--begin::Input group-->
                                             <div class="mb-5">
-                                                <textarea name="client_address" class="form-control form-control-solid" rows="3" placeholder="{{ __('Address') }}"></textarea>
+                                                <textarea name="client_address" class="form-control form-control-solid" rows="3" placeholder="{{ __('Address') }}">{{ isset($quotation) ? $quotation->client_address : null }}</textarea>
                                             </div>
                                             <!--end::Input group-->
                                         </div>
@@ -142,18 +150,20 @@
                                             <!--end::Table head-->
                                             <!--begin::Table body-->
                                             <tbody>
-                                            <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
+                                                @if (isset($quotation))
+                                                    @foreach($quotation->items as $item)
+                                                <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
                                                 <td class="pe-7">
-                                                    <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />
+                                                    <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" value="{{ $item->description }}" />
                                                 </td>
                                                 <td class="ps-0">
-                                                    <input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="1" data-kt-element="quantity" />
+                                                    <input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="{{ $item->quantity }}" data-kt-element="quantity" />
                                                 </td>
                                                 <td>
-                                                    <input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0,00" data-kt-element="price" />
+                                                    <input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0,00" data-kt-element="price" value="{{ moneyFormat($item->unit_price, null) }}" />
                                                 </td>
                                                 <td class="pt-8 text-end text-nowrap">
-                                                    <span data-kt-element="total">0,00</span></td>
+                                                    <span data-kt-element="total">{{ moneyFormat($item->unit_price * $item->quantity) }}</span></td>
                                                 <td class="pt-5 text-end">
                                                     <button type="button" class="btn btn-sm btn-icon btn-icon-danger" data-kt-element="remove-item">
                                                         <i class="ki-duotone ki-trash fs-3">
@@ -166,21 +176,49 @@
                                                     </button>
                                                 </td>
                                             </tr>
+                                                    @endforeach
+                                                @else
+                                                <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
+                                                    <td class="pe-7">
+                                                        <input type="text" class="form-control form-control-solid" name="description[]" placeholder="Description" />
+                                                    </td>
+                                                    <td class="ps-0">
+                                                        <input class="form-control form-control-solid" type="number" min="1" name="quantity[]" placeholder="1" value="1" data-kt-element="quantity" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control form-control-solid text-end" name="price[]" placeholder="0,00" data-kt-element="price" />
+                                                    </td>
+                                                    <td class="pt-8 text-end text-nowrap">
+                                                        <span data-kt-element="total">0,00</span></td>
+                                                    <td class="pt-5 text-end">
+                                                        <button type="button" class="btn btn-sm btn-icon btn-icon-danger" data-kt-element="remove-item">
+                                                            <i class="ki-duotone ki-trash fs-3">
+                                                                <span class="path1"></span>
+                                                                <span class="path2"></span>
+                                                                <span class="path3"></span>
+                                                                <span class="path4"></span>
+                                                                <span class="path5"></span>
+                                                            </i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                @endif
                                             </tbody>
                                             <!--end::Table body-->
                                             <!--begin::Table foot-->
+                                            @if (isset($quotation))
                                             <tfoot>
-                                            <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
+                                                <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
                                                 <th class="text-primary">
                                                     <button class="btn btn-sm btn-primary" data-kt-element="add-item">Add item</button>
                                                 </th>
                                                 <th colspan="2" class="border-bottom border-bottom-dashed ps-0">
                                                     <div class="d-flex flex-column align-items-start">
                                                         <div class="fs-5">Subtotal</div>
-                                                        <div class="fs-5 tax_label">VAT</div>
-                                                        <input type="hidden" class="tax_type" name="tax_type" value="" />
-                                                        <input type="hidden" class="tax_percentage" name="tax_percentage" value="0" />
-                                                        <input type="hidden" name="currency" value="EUR" />
+                                                        <div class="fs-5 tax_label">{{ __($quotation->tax_type) }}</div>
+                                                        <input type="hidden" class="tax_type" name="tax_type" value="{{ $quotation->tax_type }}" />
+                                                        <input type="hidden" class="tax_percentage" name="tax_percentage" value="{{ getTaxPercentage($quotation->tax_type) }}" />
+                                                        <input type="hidden" name="currency" value="{{ $quotation->currency }}" />
                                                     </div>
                                                 </th>
                                                 <th colspan="2" class="border-bottom border-bottom-dashed text-end">
@@ -190,7 +228,7 @@
                                                     </div>
                                                 </th>
                                             </tr>
-                                            <tr class="align-top fw-bold text-gray-700">
+                                                <tr class="align-top fw-bold text-gray-700">
                                                 <th></th>
                                                 <th colspan="2" class="fs-4 ps-0">Total</th>
                                                 <th colspan="2" class="text-end fs-4 text-nowrap">
@@ -198,6 +236,37 @@
                                                 </th>
                                             </tr>
                                             </tfoot>
+                                            @else
+                                            <tfoot>
+                                                <tr class="border-top border-top-dashed align-top fs-6 fw-bold text-gray-700">
+                                                    <th class="text-primary">
+                                                        <button class="btn btn-sm btn-primary" data-kt-element="add-item">Add item</button>
+                                                    </th>
+                                                    <th colspan="2" class="border-bottom border-bottom-dashed ps-0">
+                                                        <div class="d-flex flex-column align-items-start">
+                                                            <div class="fs-5">Subtotal</div>
+                                                            <div class="fs-5 tax_label">VAT</div>
+                                                            <input type="hidden" class="tax_type" name="tax_type" value="" />
+                                                            <input type="hidden" class="tax_percentage" name="tax_percentage" value="0" />
+                                                            <input type="hidden" name="currency" value="EUR" />
+                                                        </div>
+                                                    </th>
+                                                    <th colspan="2" class="border-bottom border-bottom-dashed text-end">
+                                                        <div class="d-flex flex-column align-items-end">
+                                                            <span data-kt-element="sub-total">0,00</span>
+                                                            <span data-kt-element="display-tax">0,00</span>
+                                                        </div>
+                                                    </th>
+                                                </tr>
+                                                <tr class="align-top fw-bold text-gray-700">
+                                                    <th></th>
+                                                    <th colspan="2" class="fs-4 ps-0">Total</th>
+                                                    <th colspan="2" class="text-end fs-4 text-nowrap">
+                                                        <span data-kt-element="grand-total">0,00</span>
+                                                    </th>
+                                                </tr>
+                                                </tfoot>
+                                            @endif
                                             <!--end::Table foot-->
                                         </table>
                                     </div>
@@ -238,7 +307,7 @@
                                     <!--begin::Notes-->
                                     <div class="mb-0">
                                         <label class="form-label fs-6 fw-bold text-gray-700">Notes</label>
-                                        <textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="This information comes to the bottom of the quotation"></textarea>
+                                        <textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="This information comes to the bottom of the quotation">{{ isset($quotation) ? $quotation->notes : null }}</textarea>
                                     </div>
                                     <!--end::Notes-->
                                 </div>
@@ -404,14 +473,14 @@
                     let quotationDate = $(form.querySelector('[name="issue_date"]'));
                     quotationDate.flatpickr({
                         enableTime: false,
-                        dateFormat: "Y-m-d",
+                        dateFormat: "d/m/Y",
                     });
 
                     // Due date. For more info, please visit the official plugin site: https://flatpickr.js.org/
                     let dueDate = $(form.querySelector('[name="due_date"]'));
                     dueDate.flatpickr({
                         enableTime: false,
-                        dateFormat: "Y-m-d",
+                        dateFormat: "d/m/Y",
                     });
                 }
 
@@ -431,10 +500,18 @@
             // On document ready
             KTUtil.onDOMContentLoaded(function () {
                 KTAppQuotationsCreate.init();
+
                 let form = document.querySelector('#kt_quotation_form');
                 let submitDraftButton = document.getElementById('kt_submit_draft_button');
+                let clientIdInput = $('[name="client_id"]');
 
-                $('[name="client_id"]').on('change', function (e) {
+                @if (isset($quotation))
+                // When editing, select a client by value
+                clientIdInput.val('{{ $quotation->client_id }}').trigger('change');
+                @endif
+
+                // When client selected, fill in client details
+                clientIdInput.on('change', function (e) {
                     let selectedOption = $(this).select2('data')[0];
 
                     if (selectedOption) {
@@ -456,6 +533,7 @@
                     }
                 });
 
+                // Handle save draft button
                 submitDraftButton.addEventListener('click', function (event) {
                     event.preventDefault();
                     submitDraftButton.disabled = true;

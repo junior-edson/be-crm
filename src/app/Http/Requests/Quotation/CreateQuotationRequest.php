@@ -23,8 +23,8 @@ class CreateQuotationRequest extends FormRequest
     {
         return [
             'client_id' => 'required|exists:clients,id',
-            'issue_date' => 'required|date',
-            'due_date' => 'required|date',
+            'issue_date' => 'required|date_format:d/m/Y',
+            'due_date' => 'required|date_format:d/m/Y',
             'client_name' => 'required|string',
             'client_email' => 'email',
             'client_address' => 'string',

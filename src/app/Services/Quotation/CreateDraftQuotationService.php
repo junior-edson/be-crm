@@ -18,6 +18,14 @@ class CreateDraftQuotationService
         $data = $request->all();
         $data['status'] = 'DRAFT';
 
+        if (isset($data['issue_date'])) {
+            $data['issue_date'] = dateFormat($data['issue_date'], true);
+        }
+
+        if (isset($data['due_date'])) {
+            $data['due_date'] = dateFormat($data['due_date'], true);
+        }
+
         if (isset($data['quotation_id'])) {
             $quotation = Quotation::findOrFail($data['quotation_id']);
             $quotation->update($data);

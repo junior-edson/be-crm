@@ -82,12 +82,12 @@
                             <th></th>
                             <th>#</th>
                             <th>Status</th>
-                            <th>Client data</th>
-                            <th>Company data</th>
-                            <th>Issue/Due date</th>
-                            <th>Has items?</th>
-                            <td></td>
-                            <th>Actions</th>
+                            <th>Dates</th>
+                            <th>Client</th>
+                            <th>Company</th>
+                            <th>Items</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -109,11 +109,15 @@
                                     </span>
                                 </td>
                                 <td>
+                                    <div class="fs-6 fw-bold text-muted">Issue: <span class="text-gray-800">{{ $quotation->issue_date ? $quotation->issue_date->format('d M, Y') : '-' }}</span></div>
+                                    <div class="fs-6 fw-bold text-muted">Due: <span class="text-gray-800">{{ $quotation->due_date ? $quotation->due_date->format('d M, Y') : '-' }}</span></div>
+                                </td>
+                                <td>
                                     <div class="d-flex align-items-center">
                                         <div class="d-flex flex-column justify-content-center">
                                             <a class="fs-6 text-gray-800 text-hover-primary">{{ $quotation->client_name }}</a>
+                                            <div class="fw-semibold text-gray-500">{!! addressLineBreaker($quotation->client_address) !!}</div>
                                             <div class="fw-semibold text-gray-500">{{ $quotation->client_email }}</div>
-                                            <div class="fw-semibold text-gray-500">{{ $quotation->client_address }}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -121,28 +125,20 @@
                                     <div class="d-flex align-items-center">
                                         <div class="d-flex flex-column justify-content-center">
                                             <a class="fs-6 text-gray-800 text-hover-primary">{{ $quotation->company_name }}</a>
+                                            <div class="fw-semibold text-gray-500">{!! addressLineBreaker($quotation->company_address) !!}</div>
                                             <div class="fw-semibold text-gray-500">{{ $quotation->company_email }}</div>
-                                            <div class="fw-semibold text-gray-500">{{ $quotation->company_address }}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <div class="mb-2 fw-bold">{{ $quotation->issue_date ? $quotation->issue_date->format('d M, Y') : '-' }} - {{ $quotation->due_date ? $quotation->due_date->format('d M, Y') : '-' }}</div>
-                                    <div class="fs-7 fw-bold text-muted">Date range</div>
-                                </td>
-                                <td>
                                     <span class="badge badge-light-secondary fw-bold px-4 py-3">
-                                        @if ($quotation->items->isNotEmpty())
-                                            Yes
-                                        @else
-                                            No
-                                        @endif
+                                        {{ $quotation->items->count() }}
                                     </span>
                                 </td>
                                 <td class="d-none">{{ $quotation->status }}</td>
-                                <td class="w-75px">
-                                    <a href="{{ route('quotation.quotation.show', $quotation->id) }}" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary ms-auto" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                        <i class="bi bi-eye-fill fs-3">
+                                <td class="w-100px">
+                                    <a href="{{ route('quotation.quotation.show', $quotation->id) }}" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="See quotation">
+                                        <i class="bi bi-eye-fill fs-5">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
                                             <span class="path3"></span>
@@ -151,8 +147,18 @@
                                         </i>
                                     </a>
 
-                                    <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary ms-auto" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                        <i class="bi bi-pencil-fill fs-3">
+                                    <a href="{{ route('quotation.quotation.edit', $quotation->id) }}" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit quotation">
+                                        <i class="bi bi-pencil-fill fs-5">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                        </i>
+                                    </a>
+
+                                    <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete draft">
+                                        <i class="bi bi-trash3-fill fs-5">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
                                             <span class="path3"></span>

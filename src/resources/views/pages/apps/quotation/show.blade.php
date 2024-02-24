@@ -97,12 +97,8 @@
                                             <div class="fw-bold fs-6 text-gray-800">{{ $quotation->client_name }}</div>
                                             <!--end::Client name-->
                                             <!--begin::Address-->
-                                            @php
-                                                $address = $quotation->client_address;
-                                                $addressWithLineBreaks = preg_replace('/(\D|^)(\d{4})/', "$1<br>$2", $address);
-                                            @endphp
                                             <div class="fw-semibold fs-7 text-gray-600" >
-                                                {!! $addressWithLineBreaks !!}
+                                                {!! addressLineBreaker($quotation->client_address) !!}
                                             </div>
                                             <!--end::Address-->
                                             <!--begin::Email-->
@@ -227,6 +223,7 @@
                                         <!--end::Container-->
                                     </div>
                                     <!--end::Content-->
+                                    <div class="separator separator-dashed my-5"></div>
                                     <!--begin::Notes-->
                                     <div class="d-flex flex-stack {{ $quotation->notes ?? 'd-none' }}">
                                         <div class="d-flex align-items-center">
@@ -257,22 +254,25 @@
                                 <!--begin::Item-->
                                 <div class="mb-6">
                                     <div class="fw-semibold text-gray-600 fs-7">Paypal:</div>
-                                    <div class="fw-bold text-gray-800 fs-6">codelabpay@codelab.co</div>
+                                    <div class="fw-bold text-gray-800 fs-6">-</div>
                                 </div>
                                 <!--end::Item-->
                                 <!--begin::Item-->
                                 <div class="mb-6">
                                     <div class="fw-semibold text-gray-600 fs-7">Account:</div>
-                                    <div class="fw-bold text-gray-800 fs-6">Nl24IBAN34553477847370033
-                                        <br />AMB NLANBZTC</div>
+                                    <div class="fw-bold text-gray-800 fs-6">-</div>
                                 </div>
                                 <!--end::Item-->
                                 <!--begin::Item-->
                                 <div class="mb-15">
                                     <div class="fw-semibold text-gray-600 fs-7">Payment Term:</div>
-                                    <div class="fw-bold fs-6 text-gray-800 d-flex align-items-center">14 days
-                                        <span class="fs-7 text-danger d-flex align-items-center">
-                                                        <span class="bullet bullet-dot bg-danger mx-2"></span>Due in 7 days</span></div>
+                                    <div class="fw-bold fs-6 text-gray-800 d-flex align-items-center">
+                                        30 days
+                                        <span class="fs-7 text-danger d-flex align-items-center d-none">
+                                            <span class="bullet bullet-dot bg-danger mx-2"></span>
+                                            Due today
+                                        </span>
+                                    </div>
                                 </div>
                                 <!--end::Item-->
                             </div>

@@ -529,7 +529,9 @@ if (!function_exists('moneyFormat')) {
             'BRL' => 'R$ ',
         ];
 
-        return $arrayCurrency[$currency] . number_format($value, $decimals, $dec_point, $thousands_sep);
+        $prefix = $currency !== null ? $arrayCurrency[$currency] : null;
+
+        return $prefix . number_format($value, $decimals, $dec_point, $thousands_sep);
     }
 }
 
@@ -553,5 +555,25 @@ if (!function_exists('getTaxAmount')) {
     {
         $percentage = getTaxPercentage($taxType);
         return $value * $percentage / 100;
+    }
+}
+
+
+if (!function_exists('dateFormat')) {
+    function dateFormat($date, $toBeSaved = false): string
+    {
+        if ($toBeSaved) {
+            return \Carbon\Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+        }
+
+        return \Carbon\Carbon::parse($date)->format('d/m/Y');
+    }
+}
+
+
+if (!function_exists('addressLineBreaker')) {
+    function addressLineBreaker($address): string
+    {
+        return preg_replace('/(\D|^)(\d{4})/', "$1<br>$2", $address);
     }
 }

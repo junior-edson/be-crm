@@ -82,7 +82,7 @@
                                                 <select name="client_id" aria-label="{{ __('Select client') }}" data-control="select2" data-placeholder="{{ __('Select client') }}" class="form-select form-select-solid">
                                                     <option value=""></option>
                                                     @foreach($clients as $client)
-                                                    <option data-tax-type-name="{{ __(getTaxName($client)) }}" data-tax-type="{{ getTaxName($client) }}" data-tax-percentage="{{ getClientTaxPercentage($client->tax_type) }}" data-name="{{ $client->name }}" data-email="{{ $client->email }}" data-address="{{ $client->address }}" value="{{ $client->id }}">
+                                                    <option data-tax-type-name="{{ __(getTaxName($client)) }}" data-tax-type="{{ getTaxName($client) }}" data-tax-percentage="{{ getClientTaxPercentage($client) }}" data-name="{{ $client->name }}" data-email="{{ $client->email }}" data-address="{{ $client->address }}" value="{{ $client->id }}">
                                                         {{ $client->name }} {{ $client->type !== \App\Enums\EnumClientType::INDIVIDUAL->value ? "(" . __('Reg.no.') . ":" . $client->registration_code . ")" : '' }}
                                                     </option>
                                                     @endforeach
@@ -270,19 +270,6 @@
                                     </option>
                                 </select>
                                 <!--end::Select-->
-                            </div>
-                            <!--end::Input group-->
-                            <!--begin::Separator-->
-                            <div class="separator separator-dashed mb-8"></div>
-                            <!--end::Separator-->
-                            <!--begin::Input group-->
-                            <div class="mb-8">
-                                <!--begin::Option-->
-                                <label class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
-                                    <span class="form-check-label ms-0 fw-bold fs-6 text-gray-700">Payment method</span>
-                                    <input class="form-check-input" type="checkbox" checked="checked" value="" />
-                                </label>
-                                <!--end::Option-->
                             </div>
                             <!--end::Input group-->
                             <!--begin::Separator-->

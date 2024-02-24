@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Proposal;
+namespace Tests\Unit\Quotation;
 
 use App\Enums\EnumClientTaxType;
 use App\Http\Requests\Quotation\CreateQuotationRequest;
@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Tests\TestCase;
 use Exception;
 
-class CreateProposalTest extends TestCase
+class CreateQuotationTest extends TestCase
 {
     /**
      * @throws Exception
@@ -25,7 +25,7 @@ class CreateProposalTest extends TestCase
         $payload = [
             'team_id' => $team->id,
             'client_id' => Client::factory()->create()->id,
-            'valid_until' => Carbon::now()->addDays(15)->format('Y-m-d'),
+            'due_date' => Carbon::now()->addDays(15)->format('Y-m-d'),
             'tax_type' => EnumClientTaxType::TAX_21_PERCENT->personTaxes(),
             'items' => [
                 [
@@ -51,7 +51,7 @@ class CreateProposalTest extends TestCase
         $this->assertDatabaseHas('proposals', [
             'team_id' => $team->id,
             'client_id' => $payload['client_id'],
-            'valid_until' => $payload['valid_until'],
+            'due_date' => $payload['due_date'],
         ]);
 
         $this->assertDatabaseCount('proposal_items', 2);

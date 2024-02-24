@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\EnumClientTaxType;
 use App\Models\Client;
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -24,6 +25,7 @@ class QuotationFactory extends Factory
 
         return [
             'team_id' => Team::factory()->create(),
+            'user_id' => User::factory()->create(),
             'client_id' => $client->id,
             'number' => fake()->bothify('####/####'),
             'issue_date' => now(),

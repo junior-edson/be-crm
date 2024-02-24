@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Proposal;
+namespace Tests\Unit\Quotation;
 
 use App\Http\Requests\Quotation\UpdateQuotationRequest;
 use App\Models\Quotation;
@@ -10,7 +10,7 @@ use App\Services\Quotation\UpdateQuotationService;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-class UpdateProposalTest extends TestCase
+class UpdateQuotationTest extends TestCase
 {
     public function testUpdateProposal(): void
     {
@@ -20,7 +20,7 @@ class UpdateProposalTest extends TestCase
         $proposal = Quotation::factory()->create(['team_id' => $team->id]);
 
         $payload = [
-            'valid_until' => Carbon::now()->addDays(25)->format('Y-m-d'),
+            'due_date' => Carbon::now()->addDays(25)->format('Y-m-d'),
             'items' => [
                 [
                     'quantity' => 1,
@@ -41,9 +41,9 @@ class UpdateProposalTest extends TestCase
         $service = new UpdateQuotationService();
         $updatedProposal = $service->execute($request, $proposal->id);
 
-        $this->assertDatabaseCount('proposals', 1);
-        $this->assertDatabaseHas('proposals', [
-            'valid_until' => $payload['valid_until'],
+        $this->assertDatabaseCount('quotations', 1);
+        $this->assertDatabaseHas('quotations', [
+            'due_date' => $payload['due_date'],
         ]);
         $this->assertSame($payload['items'], $updatedProposal->items);
     }

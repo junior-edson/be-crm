@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\EnumQuotationStatus;
 use App\Http\Requests\Quotation\CreateDraftQuotationRequest;
 use App\Http\Requests\Quotation\CreateQuotationRequest;
 use App\Services\Client\GetClientService;
 use App\Services\Quotation\CreateDraftQuotationService;
 use App\Services\Quotation\CreateQuotationService;
+use App\Services\Quotation\DeleteQuotationService;
 use App\Services\Quotation\GetQuotationService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Exception;
 use Illuminate\View\View;
@@ -80,24 +83,42 @@ class QuotationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
-    }
+    public function edit(
+        string $id,
+        GetClientService $getClientService,
+        GetQuotationService $getQuotationService
+    ): RedirectResponse|View {
+        $quotation = $getQuotationService->getQuotationById($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        if ($quotation->status === EnumQuotationStatus::DRAFT->value) {
+            return view('pages.apps.quotation.create')
+                ->with('clients', $getClientService->execute())
+                ->with('quotation', $quotation);
+        } else {
+            return redirect()->route('quotation.quotation.index');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(
+        string $id,
+        GetQuotationService $getQuotationService,
+        DeleteQuotationService $deleteQuotationService
+    ): JsonResponse {
+        try {
+            $quotation = $getQuotationService->getQuotationById($id);
+
+            if ($quotation->status !== EnumQuotationStatus::DRAFT->value) {
+                return response()->json(['message' => __('You are not allowed to delete a quotation other than draft')], 403);
+            }
+
+            $deleteQuotationService->execute($id);
+
+            return response()->json([], 204);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
 }

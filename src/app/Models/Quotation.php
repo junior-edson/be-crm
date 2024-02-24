@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Uuid;
@@ -48,6 +49,7 @@ class Quotation extends Model
         static::creating(function ($quotation) {
             $quotation->id = Uuid::uuid4()->toString();
             $quotation->team_id = Auth::user()->currentTeam->id;
+            $quotation->user_id = Auth::id();
 
             if ($quotation->status !== 'DRAFT') {
                 $quotation->number = $quotation->generateNumber();
@@ -72,5 +74,13 @@ class Quotation extends Model
     public function items(): HasMany
     {
         return $this->hasMany(QuotationItem::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

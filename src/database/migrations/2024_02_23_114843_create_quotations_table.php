@@ -16,6 +16,7 @@ return new class extends Migration
 
         Schema::create('quotations', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->foreignId('user_id')->constrained();
             $table->foreignId('team_id')->constrained();
             $table->foreignUuid('client_id')->constrained();
             $table->string('number')->nullable()->unique();

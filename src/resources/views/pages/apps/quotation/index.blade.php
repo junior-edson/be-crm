@@ -157,7 +157,7 @@
                                         </i>
                                     </a>
 
-                                    <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete draft">
+                                    <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary btnDeleteDraft" data-quotation-id="{{ $quotation->id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete draft">
                                         <i class="bi bi-trash3-fill fs-5">
                                             <span class="path1"></span>
                                             <span class="path2"></span>
@@ -180,4 +180,69 @@
         </div>
     </div>
     <!--end::Content-->
+
+    @push('scripts')
+        <script>
+            $(document).on('click', '.btnDeleteDraft', function () {
+                let quotationId = $(this).data('quotation-id');
+                let thisButton = $(this);
+
+                // Alert to confirm
+                Swal.fire({
+                    text: "{{ __('Are you sure you want to delete this draft?') }}",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "{{ __('Yes, delete it!') }}",
+                    cancelButtonText: "{{ __('No, cancel!') }}",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-active-light"
+                    },
+                    reverseButtons: true,
+                }).then(function (result) {
+                    if (result.value) {
+                        let deleteUrl = "{{ route('quotation.quotation.destroy', ':quotationId') }}";
+                        deleteUrl = deleteUrl.replace(':quotationId', quotationId);
+
+                        $.ajax({
+                            url: deleteUrl,
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    text: "{{ __('Your draft was successfully deleted!') }}",
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                });
+
+                                // Remove line from table
+                                thisButton.closest('tr').remove();
+                            },
+                            error: function (xhr, status, error) {
+                                let errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : "{{ __('Sorry, an error occurred.') }}";
+
+                                Swal.fire({
+                                    text: errorMessage,
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                });
+            });
+        </script>
+    @endpush
 </x-default-layout>

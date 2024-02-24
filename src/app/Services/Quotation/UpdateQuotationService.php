@@ -2,7 +2,7 @@
 
 namespace App\Services\Quotation;
 
-use App\Http\Requests\Proposal\UpdateQuotationRequest;
+use App\Http\Requests\Quotation\UpdateQuotationRequest;
 use App\Models\Quotation;
 use Exception;
 

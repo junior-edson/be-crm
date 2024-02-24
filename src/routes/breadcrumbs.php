@@ -63,3 +63,9 @@ Breadcrumbs::for('quotation.create', function (BreadcrumbTrail $trail) {
     $trail->parent('quotation.index');
     $trail->push('Create quotation', route('quotation.quotation.create'));
 });
+
+// Home > Quotations > View quotation
+Breadcrumbs::for('quotation.show', function (BreadcrumbTrail $trail, $quotationId) {
+    $trail->parent('quotation.index');
+    $trail->push('View quotation', route('quotation.quotation.show', $quotationId));
+});

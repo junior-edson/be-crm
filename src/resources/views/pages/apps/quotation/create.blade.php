@@ -20,7 +20,8 @@
                         <!--begin::Card body-->
                         <div class="card-body p-12">
                             <!--begin::Form-->
-                            <form action="" id="kt_quotation_form">
+                            <form id="kt_quotation_form">
+                                @csrf
                                 <!--begin::Wrapper-->
                                 <div class="d-flex flex-column align-items-start flex-xxl-row">
                                     <!--begin::Input group-->
@@ -73,14 +74,15 @@
                                     <div class="row gx-10 mb-5">
                                         <!--begin::Col-->
                                         <div class="col-lg-6">
-                                            <label class="form-label fs-6 fw-bold text-gray-700 mb-3">{{ __('Client') }}</label>
+                                            <label class="form-label fs-6 fw-bold text-gray-700 mb-3 required">{{ __('Client') }}</label>
                                             <!--begin::Input group-->
                                             <div class="mb-5">
                                                 <!--begin::Select-->
+                                                <input type="hidden" id="quotation_id" name="quotation_id" />
                                                 <select name="client_id" aria-label="{{ __('Select client') }}" data-control="select2" data-placeholder="{{ __('Select client') }}" class="form-select form-select-solid">
                                                     <option value=""></option>
                                                     @foreach($clients as $client)
-                                                    <option data-tax-type="{{ __(getTaxName($client)) }}" data-tax-percentage="{{ getTaxPercentage($client) }}" data-name="{{ $client->name }}" data-email="{{ $client->email }}" data-address="{{ $client->address }}" value="{{ $client->id }}">
+                                                    <option data-tax-type-name="{{ __(getTaxName($client)) }}" data-tax-type="{{ getTaxName($client) }}" data-tax-percentage="{{ getClientTaxPercentage($client->tax_type) }}" data-name="{{ $client->name }}" data-email="{{ $client->email }}" data-address="{{ $client->address }}" value="{{ $client->id }}">
                                                         {{ $client->name }} {{ $client->type !== \App\Enums\EnumClientType::INDIVIDUAL->value ? "(" . __('Reg.no.') . ":" . $client->registration_code . ")" : '' }}
                                                     </option>
                                                     @endforeach
@@ -176,7 +178,9 @@
                                                     <div class="d-flex flex-column align-items-start">
                                                         <div class="fs-5">Subtotal</div>
                                                         <div class="fs-5 tax_label">VAT</div>
+                                                        <input type="hidden" class="tax_type" name="tax_type" value="" />
                                                         <input type="hidden" class="tax_percentage" name="tax_percentage" value="0" />
+                                                        <input type="hidden" name="currency" value="EUR" />
                                                     </div>
                                                 </th>
                                                 <th colspan="2" class="border-bottom border-bottom-dashed text-end">
@@ -259,7 +263,7 @@
                                 <label class="form-label fw-bold fs-6 text-gray-700">{{ __('Currency') }}</label>
                                 <!--end::Label-->
                                 <!--begin::Select-->
-                                <select name="currnecy" aria-label="{{ __('Select currency') }}" data-control="select2" data-placeholder="{{ __('Select currency') }}" class="form-select form-select-solid">
+                                <select aria-label="{{ __('Select currency') }}" data-control="select2" data-placeholder="{{ __('Select currency') }}" class="form-select form-select-solid">
                                     <option value=""></option>
                                     <option value="EUR" selected>
                                         <b>EUR</b>&nbsp;-&nbsp;{{ __('Euro') }}
@@ -290,7 +294,7 @@
                                 <div class="row mb-5">
                                     <!--begin::Col-->
                                     <div class="col">
-                                        <a href="#" class="btn btn-light btn-active-light-primary w-100">
+                                        <button type="submit" class="btn btn-light btn-active-light-primary w-100" id="kt_submit_draft_button">
                                             <i class="ki-duotone ki-note-2 fs-3">
                                                 <span class="path1"></span>
                                                 <span class="path2"></span>
@@ -298,12 +302,12 @@
                                                 <span class="path4"></span>
                                             </i>
                                             Save draft
-                                        </a>
+                                        </button>
                                     </div>
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Row-->
-                                <button type="submit" href="#" class="btn btn-primary w-100" id="kt_quotation_submit_button">
+                                <button type="submit" class="btn btn-primary w-100" id="kt_quotation_submit_button">
                                     <i class="ki-duotone ki-triangle fs-3">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
@@ -328,7 +332,6 @@
 
     @push('scripts')
         <script>
-            // Class definition
             let KTAppQuotationsCreate = function () {
                 let form;
 
@@ -414,14 +417,14 @@
                     let quotationDate = $(form.querySelector('[name="issue_date"]'));
                     quotationDate.flatpickr({
                         enableTime: false,
-                        dateFormat: "d, M Y",
+                        dateFormat: "Y-m-d",
                     });
 
                     // Due date. For more info, please visit the official plugin site: https://flatpickr.js.org/
                     let dueDate = $(form.querySelector('[name="due_date"]'));
                     dueDate.flatpickr({
                         enableTime: false,
-                        dateFormat: "d, M Y",
+                        dateFormat: "Y-m-d",
                     });
                 }
 
@@ -441,18 +444,22 @@
             // On document ready
             KTUtil.onDOMContentLoaded(function () {
                 KTAppQuotationsCreate.init();
+                let form = document.querySelector('#kt_quotation_form');
+                let submitDraftButton = document.getElementById('kt_submit_draft_button');
 
                 $('[name="client_id"]').on('change', function (e) {
                     let selectedOption = $(this).select2('data')[0];
 
                     if (selectedOption) {
+                        let taxTypeName = selectedOption.element.dataset.taxTypeName;
                         let taxType = selectedOption.element.dataset.taxType;
                         let taxPercentage = selectedOption.element.dataset.taxPercentage;
                         let name = selectedOption.element.dataset.name;
                         let email = selectedOption.element.dataset.email;
                         let address = selectedOption.element.dataset.address;
 
-                        $('.tax_label').text(taxType);
+                        $('.tax_label').text(taxTypeName);
+                        $('.tax_type').val(taxType);
                         $('.tax_percentage').val(taxPercentage);
                         $('[name="client_name"]').val(name);
                         $('[name="client_email"]').val(email);
@@ -462,6 +469,49 @@
                     }
                 });
 
+                submitDraftButton.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    submitDraftButton.disabled = true;
+
+                    let formData = new FormData(form);
+
+                    $.ajax({
+                        url: '{{ route('quotation.quotation.draft') }}',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.fire({
+                                text: "{{ __('Your draft was successfully saved!') }}",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "{{ __('Ok, got it!') }}",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            }).then(function (result) {
+                                submitDraftButton.disabled = false;
+
+                                // After creating a draft, we fill the quotation id
+                                $('#quotation_id').val(response.id);
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                text: xhr.responseJSON.message || "{{ __('Sorry, an error occurred.') }}",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "{{ __('Ok, got it!') }}",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+
+                            submitDraftButton.disabled = false;
+                        }
+                    });
+                });
             });
         </script>
     @endpush

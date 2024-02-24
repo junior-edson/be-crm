@@ -47,14 +47,18 @@ class Quotation extends Model
 
         static::creating(function ($quotation) {
             $quotation->id = Uuid::uuid4()->toString();
-            $quotation->code = $quotation->generateCode();
+            $quotation->team_id = Auth::user()->currentTeam->id;
+
+            if ($quotation->status !== 'DRAFT') {
+                $quotation->number = $quotation->generateNumber();
+            }
         });
     }
 
     /**
      * @return string
      */
-    private function generateCode(): string
+    private function generateNumber(): string
     {
         $year = now()->year;
         $lastQuotation = self::whereYear('created_at', $year)->where('team_id', Auth::user()->currentTeam->id)->latest('number')->first();

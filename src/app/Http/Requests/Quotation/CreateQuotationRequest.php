@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Proposal;
+namespace App\Http\Requests\Quotation;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,7 +22,6 @@ class CreateQuotationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'team_id' => 'required|exists:teams,id',
             'client_id' => 'required|exists:clients,id',
             'issue_date' => 'required|date',
             'due_date' => 'required|date',

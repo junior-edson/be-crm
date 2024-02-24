@@ -434,7 +434,7 @@ if (!function_exists('getIcon')) {
 
 
 if (!function_exists('getTaxName')) {
-    function getTaxName($client)
+    function getTaxName($client): string
     {
         // Rule do update tax from 21% to 6%
         if (
@@ -450,8 +450,8 @@ if (!function_exists('getTaxName')) {
 }
 
 
-if (!function_exists('getTaxPercentage')) {
-    function getTaxPercentage($client)
+if (!function_exists('getClientTaxPercentage')) {
+    function getClientTaxPercentage($client): int
     {
         // Tax 21%
         if (
@@ -471,5 +471,87 @@ if (!function_exists('getTaxPercentage')) {
 
         // Autoliquidation, subcontractor, NPO, etc.
         return 0;
+    }
+}
+
+
+if (!function_exists('getTaxPercentage')) {
+    function getTaxPercentage($tax): int
+    {
+        if ($tax === \App\Enums\EnumClientTaxType::TAX_21_PERCENT->personTaxes()) {
+            return 21;
+        }
+
+        if ($tax === \App\Enums\EnumClientTaxType::TAX_6_PERCENT->personTaxes()) {
+            return 6;
+        }
+
+        return 0;
+    }
+}
+
+
+if (!function_exists('getQuotationColor')) {
+    function getQuotationColor($status): string
+    {
+        if ($status === \App\Enums\EnumQuotationStatus::DRAFT->value) {
+            return 'dark';
+        }
+
+        if ($status === \App\Enums\EnumQuotationStatus::PENDING->value) {
+            return 'warning';
+        }
+
+        if ($status === \App\Enums\EnumQuotationStatus::SENT->value) {
+            return 'primary';
+        }
+
+        if ($status === \App\Enums\EnumQuotationStatus::APPROVED->value) {
+            return 'success';
+        }
+
+        if ($status === \App\Enums\EnumQuotationStatus::REJECTED->value) {
+            return 'danger';
+        }
+
+        return 'light';
+    }
+}
+
+
+if (!function_exists('moneyFormat')) {
+    function moneyFormat($value, $currency = 'EUR', $decimals = 2, $dec_point = ',', $thousands_sep = '.'): string
+    {
+        $arrayCurrency = [
+            'EUR' => '€ ',
+            'USD' => 'U$ ',
+            'GBP' => '£ ',
+            'BRL' => 'R$ ',
+        ];
+
+        return $arrayCurrency[$currency] . number_format($value, $decimals, $dec_point, $thousands_sep);
+    }
+}
+
+
+if (!function_exists('getItemsTotalAmount')) {
+    function getItemsTotalAmount($items): float
+    {
+        $total = 0;
+
+        foreach ($items as $item) {
+            $total += $item->unit_price * $item->quantity;
+        }
+
+        return $total;
+    }
+}
+
+
+if (!function_exists('getTaxAmount')) {
+    function getTaxAmount($value, $taxType): float
+    {
+        $percentage = getTaxPercentage($taxType);
+        return $value * $percentage / 100;
     }
 }

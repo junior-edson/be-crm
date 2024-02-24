@@ -2,7 +2,7 @@
 
 namespace App\Services\Quotation;
 
-use App\Http\Requests\Proposal\CreateQuotationRequest;
+use App\Http\Requests\Quotation\CreateQuotationRequest;
 use App\Models\Quotation;
 use Exception;
 
@@ -15,7 +15,7 @@ class CreateQuotationService
      */
     public function execute(CreateQuotationRequest $request): Quotation
     {
-        $data = $request->all();
+        $data = $request->validated();
 
         $quotation = new Quotation($data);
         $savedQuotation = $quotation->save();
@@ -24,7 +24,16 @@ class CreateQuotationService
             throw new Exception('Could not create quotation');
         }
 
-        $quotation->items()->createMany($data['items']);
+        $itemsData = [];
+        foreach ($data['description'] as $key => $description) {
+            $itemsData[] = [
+                'description' => $description,
+                'quantity' => $data['quantity'][$key],
+                'price' => $data['price'][$key],
+            ];
+        }
+
+        $quotation->items()->createMany($itemsData);
 
         return $quotation;
     }

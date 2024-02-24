@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Proposal\CreateQuotationRequest;
+use App\Http\Requests\Quotation\CreateDraftQuotationRequest;
+use App\Http\Requests\Quotation\CreateQuotationRequest;
 use App\Services\Client\GetClientService;
+use App\Services\Quotation\CreateDraftQuotationService;
 use App\Services\Quotation\CreateProposalItemService;
 use App\Services\Quotation\CreateQuotationService;
+use App\Services\Quotation\GetQuotationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Exception;
@@ -16,9 +19,10 @@ class QuotationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View
+    public function index(GetQuotationService $service): View
     {
-        return view('pages.apps.quotation.index');
+        return view('pages.apps.quotation.index')
+            ->with('quotations', $service->getQuotationByStatus());
     }
 
     /**
@@ -35,12 +39,30 @@ class QuotationController extends Controller
      */
     public function store(
         CreateQuotationRequest $request,
-        CreateQuotationService $proposalService
+        CreateQuotationService $quotationService
     ): JsonResponse {
         try {
-            $proposal = $proposalService->execute($request);
+            $quotation = $quotationService->execute($request);
 
-            return response()->json($proposal);
+            return response()->json($quotation);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * @param CreateDraftQuotationRequest $request
+     * @param CreateDraftQuotationService $service
+     * @return JsonResponse
+     */
+    public function draft(
+        CreateDraftQuotationRequest $request,
+        CreateDraftQuotationService $service
+    ): JsonResponse {
+        try {
+            $quotation = $service->execute($request);
+
+            return response()->json($quotation);
         } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
         }
@@ -49,9 +71,11 @@ class QuotationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, GetQuotationService $service): View
     {
-        //
+        $quotation = $service->getQuotationById($id);
+
+        return view('pages.apps.quotation.show', compact('quotation'));
     }
 
     /**

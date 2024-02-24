@@ -3,7 +3,7 @@
 namespace Tests\Unit\Proposal;
 
 use App\Enums\EnumClientTaxType;
-use App\Http\Requests\Proposal\CreateQuotationRequest;
+use App\Http\Requests\Quotation\CreateQuotationRequest;
 use App\Models\Client;
 use App\Models\Team;
 use App\Models\User;

@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Proposal;
 
-use App\Http\Requests\Proposal\UpdateQuotationRequest;
+use App\Http\Requests\Quotation\UpdateQuotationRequest;
 use App\Models\Quotation;
 use App\Models\Team;
 use App\Models\User;

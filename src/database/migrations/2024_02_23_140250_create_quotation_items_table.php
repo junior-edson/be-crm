@@ -16,11 +16,11 @@ return new class extends Migration
 
         Schema::create('quotation_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('quotation_id')->constrained();
-            $table->string('description');
-            $table->integer('quantity');
-            $table->string('unit_type');
-            $table->float('unit_price');
+            $table->foreignUuid('quotation_id')->constrained()->onDelete('cascade');
+            $table->string('description')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->string('unit_type')->nullable();
+            $table->float('unit_price')->nullable();
             $table->timestamps();
         });
 

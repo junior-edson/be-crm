@@ -43,6 +43,7 @@ Route::middleware([
     });
 
     Route::name('quotation.')->group(function() {
+        Route::post('/quotation/draft', [QuotationController::class, 'draft'])->name('quotation.draft');
         Route::resource('/quotation', QuotationController::class);
     });
 });

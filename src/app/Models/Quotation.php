@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EnumQuotationStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -51,10 +52,25 @@ class Quotation extends Model
             $quotation->team_id = Auth::user()->currentTeam->id;
             $quotation->user_id = Auth::id();
 
-            if ($quotation->status !== 'DRAFT') {
+            if (self::isPending($quotation)) {
                 $quotation->number = $quotation->generateNumber();
             }
         });
+
+        static::updating(function ($quotation) {
+            if (self::isPending($quotation)) {
+                $quotation->number = $quotation->generateNumber();
+            }
+        });
+    }
+
+    /**
+     * @param $quotation
+     * @return bool
+     */
+    private static function isPending($quotation): bool
+    {
+        return $quotation->status === EnumQuotationStatus::PENDING->value;
     }
 
     /**

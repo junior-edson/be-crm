@@ -51,7 +51,7 @@
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
                                     <div class="d-flex flex-center flex-equal fw-row text-nowrap order-1 order-xxl-2 me-4">
-                                        <span class="fs-2x fw-bold text-gray-800">{{ __('Quotation') }}</span>
+                                        <span class="fs-2x fw-bold text-gray-800">{{ __('Quotation') }} {{ isset($quotation) && $quotation->number !== null ? '#'.$quotation->number : null }}</span>
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
@@ -307,7 +307,7 @@
                                     <!--begin::Notes-->
                                     <div class="mb-0">
                                         <label class="form-label fs-6 fw-bold text-gray-700">Notes</label>
-                                        <textarea name="notes" class="form-control form-control-solid" rows="3" placeholder="This information comes to the bottom of the quotation">{{ isset($quotation) ? $quotation->notes : null }}</textarea>
+                                        <textarea id="notes" name="notes" class="form-control form-control-solid" rows="3">{{ isset($quotation) ? $quotation->notes : null }}</textarea>
                                     </div>
                                     <!--end::Notes-->
                                 </div>
@@ -346,6 +346,7 @@
                             <!--end::Separator-->
                             <!--begin::Actions-->
                             <div class="mb-0">
+                                @if (!isQuotationStatusRejected($quotation ?? null))
                                 <!--begin::Row-->
                                 <div class="row mb-5">
                                     <!--begin::Col-->
@@ -363,13 +364,18 @@
                                     <!--end::Col-->
                                 </div>
                                 <!--end::Row-->
-                                <button type="submit" class="btn btn-primary w-100" id="kt_quotation_submit_button">
+                                @endif
+                                <button type="submit" class="btn btn-primary w-100" id="kt_submit_button">
                                     <i class="ki-duotone ki-triangle fs-3">
                                         <span class="path1"></span>
                                         <span class="path2"></span>
                                         <span class="path3"></span>
                                     </i>
+                                    @if (!isQuotationStatusRejected($quotation ?? null))
                                     Create quotation
+                                    @else
+                                    Update quotation
+                                    @endif
                                 </button>
                             </div>
                             <!--end::Actions-->
@@ -502,6 +508,7 @@
                 KTAppQuotationsCreate.init();
 
                 let form = document.querySelector('#kt_quotation_form');
+                let submitButton = document.getElementById('kt_submit_button');
                 let submitDraftButton = document.getElementById('kt_submit_draft_button');
                 let clientIdInput = $('[name="client_id"]');
 
@@ -537,8 +544,11 @@
                 submitDraftButton.addEventListener('click', function (event) {
                     event.preventDefault();
                     submitDraftButton.disabled = true;
+                    submitButton.disabled = true;
 
                     let formData = new FormData(form);
+                    formData.delete('notes');
+                    formData.append('notes', editor.getData());
 
                     $.ajax({
                         url: '{{ route('quotation.quotation.draft') }}',
@@ -557,6 +567,7 @@
                                 }
                             }).then(function (result) {
                                 submitDraftButton.disabled = false;
+                                submitButton.disabled = false;
 
                                 // After creating a draft, we fill the quotation id
                                 $('#quotation_id').val(response.id);
@@ -574,9 +585,79 @@
                             });
 
                             submitDraftButton.disabled = false;
+                            submitButton.disabled = false;
                         }
                     });
                 });
+
+                // Handle submit button
+                submitButton.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    submitDraftButton.disabled = true;
+                    submitButton.disabled = true;
+
+                    let formData = new FormData(form);
+                    formData.delete('notes');
+                    formData.append('notes', editor.getData());
+
+                    $.ajax({
+                        url: '{{ route('quotation.quotation.store') }}',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            Swal.fire({
+                                text: "{{ __('Your quotation was successfully created!') }}",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "{{ __('Ok, got it!') }}",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            }).then(function (result) {
+                                submitDraftButton.disabled = false;
+                                submitButton.disabled = false;
+
+                                window.location.href = '{{ route('quotation.quotation.index') }}';
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                text: xhr.responseJSON.message || "{{ __('Sorry, an error occurred.') }}",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "{{ __('Ok, got it!') }}",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+
+                            submitDraftButton.disabled = false;
+                            submitButton.disabled = false;
+                        }
+                    });
+                });
+
+                // CKEditor
+                ClassicEditor
+                    .create(document.querySelector('#notes'), {
+                        toolbar: {
+                            items: [
+                                'undo', 'redo',
+                                '|', 'heading',
+                                '|', 'bold', 'italic',
+                                '|', 'link', 'blockQuote',
+                                '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
+                            ]
+                        }
+                    })
+                    .then(editor => {
+                        window.editor = editor;
+                    })
+                    .catch(err => {
+                        console.error(err);
+                    });
             });
         </script>
     @endpush

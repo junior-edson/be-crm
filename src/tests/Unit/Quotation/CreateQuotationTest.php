@@ -25,8 +25,8 @@ class CreateQuotationTest extends TestCase
 
         $payload = [
             'client_id' => $client->id,
-            'issue_date' => Carbon::now()->format('Y-m-d'),
-            'due_date' => Carbon::now()->addDays(15)->format('Y-m-d'),
+            'issue_date' => Carbon::now()->format('d/m/Y'),
+            'due_date' => Carbon::now()->addDays(15)->format('d/m/Y'),
             'client_name' => $client->name,
             'client_email' => $client->email,
             'client_address' => $client->address,
@@ -57,7 +57,7 @@ class CreateQuotationTest extends TestCase
         $this->assertDatabaseHas('quotations', [
             'team_id' => $team->id,
             'client_id' => $payload['client_id'],
-            'due_date' => $payload['due_date'],
+            'due_date' => dateFormat($payload['due_date'], true),
         ]);
 
         $this->assertDatabaseCount('quotation_items', 2);

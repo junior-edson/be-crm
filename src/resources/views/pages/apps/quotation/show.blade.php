@@ -227,8 +227,7 @@
                                     <!--begin::Notes-->
                                     <div class="d-flex flex-stack {{ $quotation->notes ?? 'd-none' }}">
                                         <div class="d-flex align-items-center">
-                                            <div class="fw-semibold fs-6 text-gray-600 me-2">Notes:</div>
-                                            <div class="fw-bold fs-6 text-gray-800">{{ $quotation->notes }}</div>
+                                            <div class="fs-6 text-gray-800">{!! nl2br($quotation->notes) !!}</div>
                                         </div>
                                     </div>
                                 </div>

@@ -96,7 +96,7 @@
                                 <td>
                                     <div class="position-relative ps-6 pe-3 py-2">
                                         <div class="position-absolute start-0 top-0 w-4px h-100 rounded-2 bg-{{ getQuotationColor($quotation->status) }}"></div>
-                                        <a class="mb-1 text-gray-900 text-hover-primary fw-bold">Draft for {{ $quotation->client_name }}</a>
+                                        <a class="mb-1 text-gray-900 text-hover-primary fw-bold">{{ $quotation->client_name }}</a>
                                         <div class="fs-7 text-muted fw-bold">Created by {{ $quotation->user->name }}</div>
                                         <div class="fs-7 text-muted fw-bold">Created at {{ $quotation->created_at->format('d/m/Y H:i') }}</div>
                                     </div>
@@ -138,35 +138,63 @@
                                 </td>
                                 <td class="d-none">{{ $quotation->status }}</td>
                                 <td class="w-100px">
-                                    <a href="{{ route('quotation.quotation.show', $quotation->id) }}" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="See quotation">
-                                        <i class="bi bi-eye-fill fs-5">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                            <span class="path3"></span>
-                                            <span class="path4"></span>
-                                            <span class="path5"></span>
-                                        </i>
+                                    <a href="#" class="btn btn-sm btn-light btn-flex btn-center btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                        <i class="ki-duotone ki-down fs-5 ms-1"></i>
                                     </a>
-
-                                    <a href="{{ route('quotation.quotation.edit', $quotation->id) }}" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit quotation">
-                                        <i class="bi bi-pencil-fill fs-5">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                            <span class="path3"></span>
-                                            <span class="path4"></span>
-                                            <span class="path5"></span>
-                                        </i>
-                                    </a>
-
-                                    <button type="button" class="btn btn-clean btn-sm btn-icon btn-icon-primary btn-active-light-primary btnDeleteDraft" data-quotation-id="{{ $quotation->id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete draft">
-                                        <i class="bi bi-trash3-fill fs-5">
-                                            <span class="path1"></span>
-                                            <span class="path2"></span>
-                                            <span class="path3"></span>
-                                            <span class="path4"></span>
-                                            <span class="path5"></span>
-                                        </i>
-                                    </button>
+                                    <!--begin::Menu-->
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="{{ route('quotation.quotation.show', $quotation->id) }}" class="menu-link px-3">View</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        @if ($quotation->status === \App\Enums\EnumQuotationStatus::DRAFT->value)
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a href="{{ route('quotation.quotation.edit', $quotation->id) }}" class="menu-link px-3">Edit</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a class="menu-link px-3 btnDeleteDraft" data-quotation-id="{{ $quotation->id }}">Delete</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        @endif
+                                        @if ($quotation->status === \App\Enums\EnumQuotationStatus::PENDING->value)
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a class="menu-link px-3 btnSendQuotation" data-quotation-id="{{ $quotation->id }}">Send</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        @endif
+                                        @if ($quotation->status === \App\Enums\EnumQuotationStatus::SENT->value)
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a class="menu-link px-3 btnApproveQuotation" data-quotation-id="{{ $quotation->id }}">Approve</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a class="menu-link px-3 btnRejectQuotation" data-quotation-id="{{ $quotation->id }}">Reject</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        @endif
+                                        @if ($quotation->status === \App\Enums\EnumQuotationStatus::APPROVED->value)
+                                        <!--begin::Menu item-->
+                                        <div class="menu-item px-3">
+                                            <a class="menu-link px-3" data-quotation-id="{{ $quotation->id }}">Create invoice</a>
+                                        </div>
+                                        <!--end::Menu item-->
+                                        @endif
+                                        @if ($quotation->status === \App\Enums\EnumQuotationStatus::REJECTED->value)
+                                            <!--begin::Menu item-->
+                                            <div class="menu-item px-3">
+                                                <a href="{{ route('quotation.quotation.edit', $quotation->id) }}" class="menu-link px-3">Edit</a>
+                                            </div>
+                                            <!--end::Menu item-->
+                                        @endif
+                                    </div>
+                                    <!--end::Menu-->
                                 </td>
                             </tr>
                         @endforeach
@@ -184,6 +212,7 @@
 
     @push('scripts')
         <script>
+            // Delete draft button event
             $(document).on('click', '.btnDeleteDraft', function () {
                 let quotationId = $(this).data('quotation-id');
                 let thisButton = $(this);
@@ -238,6 +267,201 @@
                                         confirmButton: "btn btn-primary",
                                     }
                                 });
+                            }
+                        });
+                    }
+
+                });
+            });
+
+            // Send quotation button event
+            $(document).on('click', '.btnSendQuotation', function () {
+                let quotationId = $(this).data('quotation-id');
+                let thisButton = $(this);
+
+                thisButton.disabled = true;
+
+                // Alert to confirm
+                Swal.fire({
+                    text: "{{ __('Are you sure you want to send this quotation to the client? This will change status to SENT.') }}",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "{{ __('Yes, send it!') }}",
+                    cancelButtonText: "{{ __('No, cancel!') }}",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-active-light"
+                    },
+                    reverseButtons: true,
+                }).then(function (result) {
+                    if (result.value) {
+                        let sendUrl = "{{ route('quotation.quotation.send', ':quotationId') }}";
+                        sendUrl = sendUrl.replace(':quotationId', quotationId);
+
+                        $.ajax({
+                            url: sendUrl,
+                            type: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    text: "{{ __('Your quotation was successfully sent!') }}",
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                });
+
+                                window.location.reload();
+                            },
+                            error: function (xhr, status, error) {
+                                let errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : "{{ __('Sorry, an error occurred.') }}";
+
+                                Swal.fire({
+                                    text: errorMessage,
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                });
+
+                                thisButton.disabled = false;
+                            }
+                        });
+                    }
+
+                });
+            });
+
+            // Approve quotation button event
+            $(document).on('click', '.btnApproveQuotation', function () {
+                let quotationId = $(this).data('quotation-id');
+                let thisButton = $(this);
+
+                thisButton.disabled = true;
+
+                // Alert to confirm
+                Swal.fire({
+                    text: "{{ __('Are you sure you want to approve this quotation? After that you can create an invoice of it.') }}",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "{{ __('Yes, approve it!') }}",
+                    cancelButtonText: "{{ __('No, cancel!') }}",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-active-light"
+                    },
+                    reverseButtons: true,
+                }).then(function (result) {
+                    if (result.value) {
+                        let approveUrl = "{{ route('quotation.quotation.approve', ':quotationId') }}";
+                        approveUrl = approveUrl.replace(':quotationId', quotationId);
+
+                        $.ajax({
+                            url: approveUrl,
+                            type: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    text: "{{ __('Your quotation was successfully approved!') }}",
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                });
+
+                                window.location.reload();
+                            },
+                            error: function (xhr, status, error) {
+                                let errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : "{{ __('Sorry, an error occurred.') }}";
+
+                                Swal.fire({
+                                    text: errorMessage,
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                });
+
+                                thisButton.disabled = false;
+                            }
+                        });
+                    }
+
+                });
+            });
+
+            // Reject quotation button event
+            $(document).on('click', '.btnRejectQuotation', function () {
+                let quotationId = $(this).data('quotation-id');
+                let thisButton = $(this);
+
+                thisButton.disabled = true;
+
+                // Alert to confirm
+                Swal.fire({
+                    text: "{{ __('Are you sure you want to reject this quotation?') }}",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "{{ __('Yes, reject it!') }}",
+                    cancelButtonText: "{{ __('No, cancel!') }}",
+                    customClass: {
+                        confirmButton: "btn btn-primary",
+                        cancelButton: "btn btn-active-light"
+                    },
+                    reverseButtons: true,
+                }).then(function (result) {
+                    if (result.value) {
+                        let rejectUrl = "{{ route('quotation.quotation.reject', ':quotationId') }}";
+                        rejectUrl = rejectUrl.replace(':quotationId', quotationId);
+
+                        $.ajax({
+                            url: rejectUrl,
+                            type: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    text: "{{ __('Your quotation was successfully rejected!') }}",
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                });
+
+                                window.location.reload();
+                            },
+                            error: function (xhr, status, error) {
+                                let errorMessage = xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : "{{ __('Sorry, an error occurred.') }}";
+
+                                Swal.fire({
+                                    text: errorMessage,
+                                    icon: "error",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "{{ __('Ok, got it!') }}",
+                                    customClass: {
+                                        confirmButton: "btn btn-primary",
+                                    }
+                                });
+
+                                thisButton.disabled = false;
                             }
                         });
                     }

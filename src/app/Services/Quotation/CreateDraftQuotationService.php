@@ -2,6 +2,7 @@
 
 namespace App\Services\Quotation;
 
+use App\Enums\EnumQuotationStatus;
 use App\Http\Requests\Quotation\CreateDraftQuotationRequest;
 use App\Models\Quotation;
 use Exception;
@@ -16,7 +17,7 @@ class CreateDraftQuotationService
     public function execute(CreateDraftQuotationRequest $request): Quotation
     {
         $data = $request->all();
-        $data['status'] = 'DRAFT';
+        $data['status'] = EnumQuotationStatus::DRAFT->value;
 
         if (isset($data['issue_date'])) {
             $data['issue_date'] = dateFormat($data['issue_date'], true);
@@ -42,36 +43,11 @@ class CreateDraftQuotationService
         }
 
         if (!empty($data['description'])) {
-            $itemsData = self::getQuotationItems($data);
+            $itemsData = getQuotationItems($data);
             $quotation->items()->delete();
             $quotation->items()->createMany($itemsData);
         }
 
         return $quotation;
-    }
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    private static function getQuotationItems(array $data): array
-    {
-        $itemsData = [];
-        foreach ($data['description'] as $key => $description) {
-            if ($description === '' || $description === null) {
-                continue;
-            }
-
-            // Money formatting (it comes as € 1.123,50)
-            $price = str_replace(['€ ', '.', ','], ['', '', '.'], $data['price'][$key]);
-
-            $itemsData[] = [
-                'description' => $description,
-                'quantity' => $data['quantity'][$key],
-                'unit_price' => $price,
-            ];
-        }
-
-        return $itemsData;
     }
 }

@@ -6,10 +6,13 @@ use App\Enums\EnumQuotationStatus;
 use App\Http\Requests\Quotation\CreateDraftQuotationRequest;
 use App\Http\Requests\Quotation\CreateQuotationRequest;
 use App\Services\Client\GetClientService;
+use App\Services\Quotation\ApproveQuotationService;
 use App\Services\Quotation\CreateDraftQuotationService;
 use App\Services\Quotation\CreateQuotationService;
 use App\Services\Quotation\DeleteQuotationService;
 use App\Services\Quotation\GetQuotationService;
+use App\Services\Quotation\RejectQuotationService;
+use App\Services\Quotation\SendQuotationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Exception;
@@ -31,6 +34,8 @@ class QuotationController extends Controller
      */
     public function create(GetClientService $getClientService): View
     {
+        addVendor('ckeditor-classic');
+
         return view('pages.apps.quotation.create')
             ->with('clients', $getClientService->execute());
     }
@@ -70,6 +75,54 @@ class QuotationController extends Controller
     }
 
     /**
+     * @param string $id
+     * @param SendQuotationService $service
+     * @return JsonResponse
+     */
+    public function send(string $id, SendQuotationService $service): JsonResponse
+    {
+        try {
+            $quotation = $service->execute($id);
+
+            return response()->json($quotation);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * @param string $id
+     * @param ApproveQuotationService $service
+     * @return JsonResponse
+     */
+    public function approve(string $id, ApproveQuotationService $service): JsonResponse
+    {
+        try {
+            $quotation = $service->execute($id);
+
+            return response()->json($quotation);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * @param string $id
+     * @param RejectQuotationService $service
+     * @return JsonResponse
+     */
+    public function reject(string $id, RejectQuotationService $service): JsonResponse
+    {
+        try {
+            $quotation = $service->execute($id);
+
+            return response()->json($quotation);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(string $id, GetQuotationService $service): View
@@ -87,9 +140,14 @@ class QuotationController extends Controller
         GetClientService $getClientService,
         GetQuotationService $getQuotationService
     ): RedirectResponse|View {
+        addVendor('ckeditor-classic');
+
         $quotation = $getQuotationService->getQuotationById($id);
 
-        if ($quotation->status === EnumQuotationStatus::DRAFT->value) {
+        if (
+            $quotation->status === EnumQuotationStatus::DRAFT->value
+            || $quotation->status === EnumQuotationStatus::REJECTED->value
+        ) {
             return view('pages.apps.quotation.create')
                 ->with('clients', $getClientService->execute())
                 ->with('quotation', $quotation);

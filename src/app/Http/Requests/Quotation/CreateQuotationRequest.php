@@ -33,7 +33,6 @@ class CreateQuotationRequest extends FormRequest
             'company_address' => 'required|string',
             'tax_type' => 'required|string',
             'currency' => 'required|string',
-            'notes' => 'string',
             'status' => 'string',
         ];
     }

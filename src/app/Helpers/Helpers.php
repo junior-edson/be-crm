@@ -577,3 +577,39 @@ if (!function_exists('addressLineBreaker')) {
         return preg_replace('/(\D|^)(\d{4})/', "$1<br>$2", $address);
     }
 }
+
+
+if (!function_exists('getQuotationItems')) {
+    function getQuotationItems(array $data): array
+    {
+        $itemsData = [];
+        foreach ($data['description'] as $key => $description) {
+            if ($description === '' || $description === null) {
+                continue;
+            }
+
+            // Money formatting (it comes as € 1.123,50)
+            $price = str_replace(['€ ', '.', ','], ['', '', '.'], $data['unit_price'][$key]);
+
+            $itemsData[] = [
+                'description' => $description,
+                'quantity' => $data['quantity'][$key],
+                'unit_price' => $price,
+            ];
+        }
+
+        return $itemsData;
+    }
+}
+
+
+if (!function_exists('isQuotationStatusRejected')) {
+    function isQuotationStatusRejected($quotation): bool
+    {
+        if ($quotation === null) {
+            return false;
+        }
+
+        return $quotation->status === \App\Enums\EnumQuotationStatus::REJECTED->value;
+    }
+}

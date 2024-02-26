@@ -2,6 +2,7 @@
 
 namespace App\Services\Quotation;
 
+use App\Enums\EnumQuotationStatus;
 use App\Http\Requests\Quotation\CreateQuotationRequest;
 use App\Models\Quotation;
 use Exception;
@@ -16,24 +17,36 @@ class CreateQuotationService
     public function execute(CreateQuotationRequest $request): Quotation
     {
         $data = $request->all();
+        $data['status'] = EnumQuotationStatus::PENDING->value;
 
-        $quotation = new Quotation($data);
-        $savedQuotation = $quotation->save();
+        if (isset($data['issue_date'])) {
+            $data['issue_date'] = dateFormat($data['issue_date'], true);
+        }
 
-        if (!$savedQuotation) {
+        if (isset($data['due_date'])) {
+            $data['due_date'] = dateFormat($data['due_date'], true);
+        }
+
+        if (isset($data['quotation_id'])) {
+            $quotation = Quotation::findOrFail($data['quotation_id']);
+            $quotation->update($data);
+        } else {
+            $quotation = Quotation::create($data);
+        }
+
+        if (!$quotation) {
             throw new Exception('Could not create quotation');
         }
 
-        $itemsData = [];
-        foreach ($data['description'] as $key => $description) {
-            $itemsData[] = [
-                'description' => $description,
-                'quantity' => $data['quantity'][$key],
-                'unit_price' => $data['unit_price'][$key],
-            ];
+        if (!isset($data['description'])) {
+            return $quotation;
         }
 
-        $quotation->items()->createMany($itemsData);
+        if (!empty($data['description'])) {
+            $itemsData = getQuotationItems($data);
+            $quotation->items()->delete();
+            $quotation->items()->createMany($itemsData);
+        }
 
         return $quotation;
     }

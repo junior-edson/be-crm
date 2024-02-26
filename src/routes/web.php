@@ -44,6 +44,9 @@ Route::middleware([
 
     Route::name('quotation.')->group(function() {
         Route::post('/quotation/draft', [QuotationController::class, 'draft'])->name('quotation.draft');
+        Route::post('/quotation/{quotation}/send', [QuotationController::class, 'send'])->name('quotation.send');
+        Route::post('/quotation/{quotation}/approve', [QuotationController::class, 'approve'])->name('quotation.approve');
+        Route::post('/quotation/{quotation}/reject', [QuotationController::class, 'reject'])->name('quotation.reject');
         Route::resource('/quotation', QuotationController::class);
     });
 });

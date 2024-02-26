@@ -589,7 +589,7 @@ if (!function_exists('getQuotationItems')) {
             }
 
             // Money formatting (it comes as € 1.123,50)
-            $price = str_replace(['€ ', '.', ','], ['', '', '.'], $data['unit_price'][$key]);
+            $price = str_replace(['€ ', '.', ','], ['', '', '.'], $data['price'][$key]);
 
             $itemsData[] = [
                 'description' => $description,

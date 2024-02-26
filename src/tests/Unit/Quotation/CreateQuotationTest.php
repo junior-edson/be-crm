@@ -43,7 +43,7 @@ class CreateQuotationTest extends TestCase
                 1,
                 2,
             ],
-            'unit_price' => [
+            'price' => [
                 100,
                 200,
             ],
@@ -65,13 +65,13 @@ class CreateQuotationTest extends TestCase
             'quotation_id' => $createdQuotation->id,
             'description' => $payload['description'][0],
             'quantity' => $payload['quantity'][0],
-            'unit_price' => $payload['unit_price'][0],
+            'unit_price' => $payload['price'][0],
         ]);
         $this->assertDatabaseHas('quotation_items', [
             'quotation_id' => $createdQuotation->id,
             'description' => $payload['description'][1],
             'quantity' => $payload['quantity'][1],
-            'unit_price' => $payload['unit_price'][1],
+            'unit_price' => $payload['price'][1],
         ]);
     }
 }

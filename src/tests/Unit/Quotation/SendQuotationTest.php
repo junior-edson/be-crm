@@ -7,6 +7,7 @@ use App\Models\Quotation;
 use App\Models\Team;
 use App\Models\User;
 use App\Services\Quotation\SendQuotationService;
+use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class SendQuotationTest extends TestCase
@@ -39,6 +40,6 @@ class SendQuotationTest extends TestCase
         $this->expectExceptionMessage('Quotation not found');
 
         $service = new SendQuotationService();
-        $service->execute(0);
+        $service->execute(Uuid::uuid4());
     }
 }

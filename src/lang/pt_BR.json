@@ -60,7 +60,7 @@
     "Individual": "Pessoa física",
     "A person that is your client. Taxes applied: 21% or self liquidation.": "Uma pessoa que é seu cliente. Impostos aplicados: 21% ou autoliquidação",
     "System will validate the tax according to the client type": "O sistema aplicará o imposto de acordo com o tipo do cliente.",
-    "Client": "Criando cliente",
+    "Client": "Cliente",
     "VAT 21%": "TVA 21%",
     "Self liquidation": "Autoliquidação",
     "Subcontracted": "Subcontratação",
@@ -88,5 +88,11 @@
     "Discard": "Descartar",
     "Submit": "Salvar",
     "Please wait...": "Aguarde por favor...",
-    "Close": "Fechar"
+    "Close": "Fechar",
+
+    "_QUOTATIONS": {},
+    "TAX_21_PERCENT": "TVA 21%",
+    "TAX_6_PERCENT": "TVA 6%",
+    "SELF_LIQUIDATION": "Autoliquidação",
+    "SUBCONTRACTOR": "Subcontratação"
 }

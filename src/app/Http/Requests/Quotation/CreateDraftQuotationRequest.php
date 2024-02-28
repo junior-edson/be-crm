@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Proposal;
+namespace App\Http\Requests\Quotation;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateProposalRequest extends FormRequest
+class CreateDraftQuotationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,13 @@ class CreateProposalRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'team_id' => 'required|exists:teams,id',
             'client_id' => 'required|exists:clients,id',
-            'valid_until' => 'required|date',
-            'items' => 'required|array',
+            'client_name' => 'required|string',
+            'company_name' => 'required|string',
+            'company_email' => 'required|email',
+            'company_address' => 'required|string',
+            'tax_type' => 'required|string',
+            'currency' => 'required|string',
         ];
     }
 }

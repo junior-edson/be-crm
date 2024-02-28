@@ -431,3 +431,185 @@ if (!function_exists('getIcon')) {
         return theme()->getIcon($name, $class, $type, $tag);
     }
 }
+
+
+if (!function_exists('getTaxName')) {
+    function getTaxName($client): string
+    {
+        // Rule do update tax from 21% to 6%
+        if (
+            $client->tax_type === \App\Enums\EnumClientTaxType::TAX_21_PERCENT->personTaxes()
+            && $client->is_building_older_than_10_years === 1
+        ) {
+            return \App\Enums\EnumClientTaxType::TAX_6_PERCENT->personTaxes();
+        }
+
+        // Autoliquidation, subcontractor, NPO, etc.
+        return $client->tax_type;
+    }
+}
+
+
+if (!function_exists('getClientTaxPercentage')) {
+    function getClientTaxPercentage($client): int
+    {
+        // Tax 21%
+        if (
+            $client->tax_type === \App\Enums\EnumClientTaxType::TAX_21_PERCENT->personTaxes()
+            && $client->is_building_older_than_10_years === 0
+        ) {
+            return 21;
+        }
+
+        // Tax 6%
+        if (
+            $client->tax_type === \App\Enums\EnumClientTaxType::TAX_21_PERCENT->personTaxes()
+            && $client->is_building_older_than_10_years === 1
+        ) {
+            return 6;
+        }
+
+        // Autoliquidation, subcontractor, NPO, etc.
+        return 0;
+    }
+}
+
+
+if (!function_exists('getTaxPercentage')) {
+    function getTaxPercentage($tax): int
+    {
+        if ($tax === \App\Enums\EnumClientTaxType::TAX_21_PERCENT->personTaxes()) {
+            return 21;
+        }
+
+        if ($tax === \App\Enums\EnumClientTaxType::TAX_6_PERCENT->personTaxes()) {
+            return 6;
+        }
+
+        return 0;
+    }
+}
+
+
+if (!function_exists('getQuotationColor')) {
+    function getQuotationColor($status): string
+    {
+        if ($status === \App\Enums\EnumQuotationStatus::DRAFT->value) {
+            return 'dark';
+        }
+
+        if ($status === \App\Enums\EnumQuotationStatus::PENDING->value) {
+            return 'warning';
+        }
+
+        if ($status === \App\Enums\EnumQuotationStatus::SENT->value) {
+            return 'primary';
+        }
+
+        if ($status === \App\Enums\EnumQuotationStatus::APPROVED->value) {
+            return 'success';
+        }
+
+        if ($status === \App\Enums\EnumQuotationStatus::REJECTED->value) {
+            return 'danger';
+        }
+
+        return 'light';
+    }
+}
+
+
+if (!function_exists('moneyFormat')) {
+    function moneyFormat($value, $currency = 'EUR', $decimals = 2, $dec_point = ',', $thousands_sep = '.'): string
+    {
+        $arrayCurrency = [
+            'EUR' => '€ ',
+            'USD' => 'U$ ',
+            'GBP' => '£ ',
+            'BRL' => 'R$ ',
+        ];
+
+        $prefix = $currency !== null ? $arrayCurrency[$currency] : null;
+
+        return $prefix . number_format($value, $decimals, $dec_point, $thousands_sep);
+    }
+}
+
+
+if (!function_exists('getItemsTotalAmount')) {
+    function getItemsTotalAmount($items): float
+    {
+        $total = 0;
+
+        foreach ($items as $item) {
+            $total += $item->unit_price * $item->quantity;
+        }
+
+        return $total;
+    }
+}
+
+
+if (!function_exists('getTaxAmount')) {
+    function getTaxAmount($value, $taxType): float
+    {
+        $percentage = getTaxPercentage($taxType);
+        return $value * $percentage / 100;
+    }
+}
+
+
+if (!function_exists('dateFormat')) {
+    function dateFormat($date, $toBeSaved = false): string
+    {
+        if ($toBeSaved) {
+            return \Carbon\Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+        }
+
+        return \Carbon\Carbon::parse($date)->format('d/m/Y');
+    }
+}
+
+
+if (!function_exists('addressLineBreaker')) {
+    function addressLineBreaker($address): string
+    {
+        return preg_replace('/(\D|^)(\d{4})/', "$1<br>$2", $address);
+    }
+}
+
+
+if (!function_exists('getQuotationItems')) {
+    function getQuotationItems(array $data): array
+    {
+        $itemsData = [];
+        foreach ($data['description'] as $key => $description) {
+            if ($description === '' || $description === null) {
+                continue;
+            }
+
+            // Money formatting (it comes as € 1.123,50)
+            $price = str_replace(['€ ', '.', ','], ['', '', '.'], $data['price'][$key]);
+
+            $itemsData[] = [
+                'description' => $description,
+                'quantity' => $data['quantity'][$key],
+                'unit_price' => $price,
+            ];
+        }
+
+        return $itemsData;
+    }
+}
+
+
+if (!function_exists('isQuotationStatusRejected')) {
+    function isQuotationStatusRejected($quotation): bool
+    {
+        if ($quotation === null) {
+            return false;
+        }
+
+        return $quotation->status === \App\Enums\EnumQuotationStatus::REJECTED->value;
+    }
+}

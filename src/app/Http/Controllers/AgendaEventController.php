@@ -4,14 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Agenda\CreateAgendaEventRequest;
 use App\Http\Requests\Agenda\UpdateAgendaEventRequest;
-use App\Models\AgendaEvent;
 use App\Services\Agenda\CreateAgendaEventService;
 use App\Services\Agenda\DeleteAgendaEventService;
 use App\Services\Agenda\GetAgendaEventService;
 use App\Services\Agenda\UpdateAgendaEventService;
 use App\Services\Client\GetClientService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AgendaEventController extends Controller

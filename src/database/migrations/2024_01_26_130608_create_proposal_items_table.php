@@ -13,11 +13,6 @@ return new class extends Migration
     {
         Schema::create('proposal_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignUuid('proposal_id')->constrained();
-            $table->string('description');
-            $table->string('unit_type');
-            $table->integer('quantity');
-            $table->float('unit_price');
             $table->timestamps();
         });
     }

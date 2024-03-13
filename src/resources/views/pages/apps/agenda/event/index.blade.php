@@ -272,7 +272,6 @@
                 }
 
                 const triggerCreateNewEvent = (allDayToggle) => {
-                    console.log('create event');
                     // Validate form before submit
                     if (validator) {
                         validator.validate().then(function (status) {
@@ -409,7 +408,6 @@
                 }
 
                 const triggerEditEvent = (allDayToggle) => {
-                    console.log('edit event');
                     // Validate form before submit
                     if (validator) {
                         validator.validate().then(function (status) {

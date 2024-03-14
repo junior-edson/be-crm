@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use Illuminate\Support\Facades\Redis;
+
 class Theme
 {
     /**

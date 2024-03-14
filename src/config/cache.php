@@ -76,9 +76,12 @@ return [
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'cache',
+            'connection' => 'default',
             'lock_connection' => 'default',
+            'lock_store' => 'redis',
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
         ],
+
 
         'dynamodb' => [
             'driver' => 'dynamodb',
